@@ -1,28 +1,22 @@
 import "./globals.css";
-import type { Viewport } from 'next'
+import Footer from "./components/Layout/Footer";
+import Header from "./components/Layout/Header";
+import { SidebarUI } from "./components/Sidebar/SidebarUI";
+import { LoginModal } from "./components/LoginModal/LoginModal";
 import { Metadata } from "next";
-import NextTopLoader from "nextjs-toploader";
-
-import Footer from "@/app/components/Layout/Footer";
-import Header from "@/app/components/Layout/Header";
-import { LoginModal } from "@/app/components/LoginModal/LoginModal";
-import { SidebarUI } from "@/app/components/Sidebar/SidebarUI";
 import { LayoutProvider } from "@/app/components/LayoutProvider/LayoutProvider";
+import NextTopLoader from "nextjs-toploader";
 
 export const metadata: Metadata = {
   title: {
     default: "Create Wix Demo Site",
     template: "%s | Create Wix Demo Site",
   },
+  viewport: "width=device-width, initial-scale=1",
   icons: {
     icon: "https://www.wix.com/favicon.ico",
   },
 };
-
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1
-}
 
 export default function RootLayout({
                                      children,

@@ -1,0 +1,30 @@
+.navbar-burger {
+    --button-color: black;
+    border: black solid 1px;
+    overflow: hidden;
+    z-index: 51;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+}
+
+.navbar-burger.extended {
+    border: none;
+}
+
+.navbar-burger .hamburger {
+    transition: all 1s;
+}
+
+.navbar-burger.extended .hamburger {
+    translate: 3px -1px;
+    rotate: 0.125turn;
+}
+
+.navbar-burger .line {
+    transition: 1s;
+    stroke-dasharray: 60 31 60 300;
+}
+
+.navbar-burger.extended .line {
+    stroke-dasharray: 60 105 60 300;
+    stroke-dashoffset: -90;
+}

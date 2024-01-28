@@ -1,27 +1,207 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
   --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --background-rgb: 0, 0, 0;
+  --font_global: normal normal normal 16px/1.4em georgia, palatino, 'book antiqua', 'palatino linotype', serif;
+  --font_1: normal normal normal 16px/1.4em din-next-w01-light, din-next-w02-light, din-next-w10-light, sans-serif;
+  --font_2: normal normal normal 47px/1.4em georgia, palatino, 'book antiqua', 'palatino linotype', serif;
+  --font_3: normal normal normal 55px/1.4em georgia, palatino, 'book antiqua', 'palatino linotype', serif;
+  --font_4: normal normal normal 36px/1.4em georgia, palatino, 'book antiqua', 'palatino linotype', serif;
+  --font_5: normal normal normal 24px/1.4em georgia, palatino, 'book antiqua', 'palatino linotype', serif;
+  --font_6: normal normal bold 20px/1.4em nimbus-sans-tw01con, nimbus-sans-tw05con, sans-serif;
+  --font_7: normal normal normal 17px/1.4em din-next-w01-light, din-next-w02-light, din-next-w10-light, sans-serif;
+  --font_8: normal normal normal 15px/1.4em din-next-w01-light, din-next-w02-light, din-next-w10-light, sans-serif;
+  --text-color: 47, 46, 46;
+  --lnw1: 3px;
+  --brd: 47, 46, 46;
+  --alpha-brd: 1;
+  --color_15: 0, 0, 0;
+  --alpha-txt: 1;
+  --dst: 5px;
 }
 
-@media (prefers-color-scheme: dark) {
+/* Mobile Styles */
+@media only screen and (max-width: 768px) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --font_global: normal normal normal 12px/1.4em georgia, palatino, 'book antiqua', 'palatino linotype', serif;
+    --font_1: normal normal normal 12px/1.4em din-next-w01-light, din-next-w02-light, din-next-w10-light, sans-serif;
+    --font_2: normal normal normal 28px/1.4em georgia, palatino, 'book antiqua', 'palatino linotype', serif;
+    --font_3: normal normal normal 36px/1.4em georgia, palatino, 'book antiqua', 'palatino linotype', serif;
+    --font_4: normal normal normal 22px/1.4em georgia, palatino, 'book antiqua', 'palatino linotype', serif;
+    --font_5: normal normal normal 14px/1.4em georgia, palatino, 'book antiqua', 'palatino linotype', serif;
+    --font_6: normal normal bold 12px/1.4em nimbus-sans-tw01con, nimbus-sans-tw05con, sans-serif;
+    --font_7: normal normal normal 12px/1.4em din-next-w01-light, din-next-w02-light, din-next-w10-light, sans-serif;
+    --font_8: normal normal normal 11px/1.4em din-next-w01-light, din-next-w02-light, din-next-w10-light, sans-serif;
   }
 }
 
+
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  color: rgb(var(--text-color));
+  background: rgb(var(--background-rgb));
+}
+
+@layer components {
+  .btn-main {
+    transition: border-color 0.4s ease 0s, background-color 0.4s ease 0s, border-color .4s ease 0s, background-color .4s ease 0s;
+    color: rgb(var(--text-color));
+    border-color: rgb(var(--brd));
+    font-family: Arial, Helvetica, sans-serif;
+    @apply text-sm;
+    @apply font-medium;
+    @apply bg-transparent;
+    @apply border;
+    @apply hover:bg-custom-3;
+    @apply hover:text-custom-1;
+    @apply focus:outline-none;
+    @apply focus:ring-4;
+    @apply focus:ring-gray-300;
+    @apply rounded-none;
+    @apply px-5;
+    @apply py-2;
+  }
+
+  .btn-main[disabled] {
+    @apply hover:text-white;
+    @apply text-white;
+    @apply bg-gray-400;
+    @apply border-gray-400;
+    @apply hover:bg-gray-400;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .btn-main,
+    .btn-main[disabled] {
+      @apply text-xl;
+    }
+  }
+
+  .font-default {
+    font-family: 'Poppins-SemiBold', sans-serif;
+  }
+
+  .font-helvetica {
+    font-family: Helvetica-W01-Light, sans-serif;
+  }
+
+  h1, .title {
+    @apply text-5xl;
+  }
+
+  h2 {
+    @apply text-base;
+    @apply sm:text-xl;
+  }
+
+  .h-header {
+    @apply h-[122px];
+  }
+
+  .header-line {
+    @apply w-9;
+    @apply h-[2px];
+    @apply bg-black;
+    @apply mb-2;
+  }
+
+  .inner-page-title {
+    @apply py-[24px];
+    @apply text-center;
+    @apply text-[55px];
+  }
+
+  .inner-page-subtitle {
+    @apply text-center;
+    @apply text-[32px];
+    @apply max-md:text-[26px];
+  }
+
+  .card-title {
+    @apply font-bold text-xl mb-2 hover:text-gray-700 text-left w-full my-7;
+  }
+
+  .card-subtitle {
+    @apply md:text-sm text-[12px] text-left w-full mb-5;
+  }
+
+  .card-price {
+    @apply md:text-lg text-[16px] text-center w-full;
+  }
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font: var(--font_global);
+}
+
+h1 {
+  font: var(--font_1);
+}
+
+h2 {
+  font: var(--font_2);
+}
+
+h3 {
+  font: var(--font_3);
+}
+
+h4 {
+  font: var(--font_4);
+}
+
+h5 {
+  font: var(--font_5);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a, p {
+  line-height: initial;
+}
+
+b, strong {
+  font-weight: bold;
+}
+
+span, p {
+  color: rgb(var(--color_15));
+}
+
+span, p, div {
+  @apply font-thin;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* Divider of rich content */
+._4-MIc svg {
+  stroke: #E0E0E0;
+  stroke-width: 2px;
 }

@@ -19,7 +19,10 @@ const CalendarSidebar = ({
   selectedSlot?: SlotViewModel["slotAvailability"];
 }) => {
   const [selectedSlot, setSelectedSlot] = useState<
-    undefined
+  {
+    bookable: boolean,
+    bookingPolicyViolations?: { tooLateToBook: boolean }
+  } | undefined
   >();
   const [redirecting, setRedirecting] = useState<boolean>(false);
   const formattedPrice = "13$";
@@ -80,11 +83,7 @@ const CalendarSidebar = ({
                     disabled={!slotOption.slotAvailability.bookable}
                     value={index}
                   >
-                    {`${
-                      slotOption.slotAvailability.slot?.location?.name ?? ""
-                    } with ${
-                      slotOption.slotAvailability.slot?.resource?.name ?? ""
-                    }`.trim()}
+                    Central Park with John Doe
                   </option>
                 ))}
               </select>

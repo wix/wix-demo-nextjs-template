@@ -6,7 +6,7 @@ export type SlotViewModel = {
   formattedTime: string;
   slotAvailability: {
     bookable: boolean,
-    bookingPolicyViolations: { tooLateToBook: boolean }
+    bookingPolicyViolations?: { tooLateToBook: boolean }
   }
 };
 
@@ -16,7 +16,7 @@ const SlotTooltip = ({
   children,
 }: PropsWithChildren<{
   bookable: boolean,
-  bookingPolicyViolations: { tooLateToBook: boolean }
+  bookingPolicyViolations?: { tooLateToBook: boolean }
 }>) =>
   bookable ? (
     <div className="w-full">{children}</div>

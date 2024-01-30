@@ -1,9 +1,10 @@
 import React, { Suspense } from "react";
 import { Metadata } from "next";
+import Image from 'next/image';
 import Link from "next/link";
 import { CardSkeleton } from "@/app/components/Skeletons/Skeletons";
+import { PLACEHOLDER_IMAGE } from '@/app/constants';
 import { BLOGS_ROUTE } from "@/app/routes";
-import Image from 'next/image';
 
 const placeHolderItems = [
   {
@@ -14,7 +15,7 @@ const placeHolderItems = [
         name: "placeholder",
         width: 600,
         height: 800,
-        url: "/images/placeholder.jpg",
+        url: PLACEHOLDER_IMAGE,
       },
       dishName: "placeholder",
       preparationInstructions: "placeholder",
@@ -29,7 +30,7 @@ const placeHolderItems = [
         name: "placeholder",
         width: 600,
         height: 800,
-        url: "/images/placeholder.jpg",
+        url: PLACEHOLDER_IMAGE,
       },
       dishName: "placeholder",
       preparationInstructions: "placeholder",
@@ -54,7 +55,7 @@ const BlogCard: React.FC<{ blog: any; index?: number }> = ({
       <div className="h-[400px] w-full">
         <Image
           alt="blog post"
-          src="/images/placeholder.jpg"
+          src={PLACEHOLDER_IMAGE}
           width={600}
           height={800}
           objectFit="cover"

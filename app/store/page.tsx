@@ -1,12 +1,13 @@
 import React, { Suspense } from "react";
-import Image from "next/image";
-import { ProductCategories } from "@/app/components/ProductCategories/ProductCategories";
-import Link from "next/link";
 import { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import { ProductCategories } from "@/app/components/ProductCategories/ProductCategories";
 import {
   CardSkeleton,
   ListSkeleton,
 } from "@/app/components/Skeletons/Skeletons";
+import { PLACEHOLDER_IMAGE } from '@/app/constants';
 
 export const metadata: Metadata = {
   title: "Store",
@@ -36,7 +37,7 @@ const ProductCard = ({
             objectPosition: "center",
           }}
           sizes="(max-width: 768px) 100vw, (max-width: 1535px) 33vw, 25vw"
-          src="/images/placeholder.jpg"
+          src={PLACEHOLDER_IMAGE}
           alt="main image"
           className="w-full h-auto"
           priority={index < 4}

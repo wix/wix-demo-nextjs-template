@@ -1,5 +1,6 @@
-import { ProductSidebar } from "../../components/Product/ProductSidebar/ProductSidebar";
+import { ProductSidebar } from "@/app/components/Product/ProductSidebar/ProductSidebar";
 import ImageGalleryClient from '@/app/components/Image/ImageGallery/ImageGallery.client';
+import { PLACEHOLDER_IMAGE } from '@/app/constants';
 
 export async function generateMetadata({ params }: any) {
   const product = { name: "Product name" };
@@ -31,7 +32,7 @@ export default async function StoresCategoryPage({ params }: any) {
           <div className="flex flex-col sm:flex-row gap-2">
             <div className="box-border flex flex-col basis-1/2">
               <div>
-                <ImageGalleryClient items={[{src: "/images/placeholder.jpg"}, {src: "/images/placeholder.jpg"}, {src: "/images/placeholder.jpg"}]} />
+                <ImageGalleryClient items={[{src: PLACEHOLDER_IMAGE}, {src: PLACEHOLDER_IMAGE}, {src: PLACEHOLDER_IMAGE}]} />
                 <div
                   className="pb-4 mx-auto break-words w-full max-w-xl mt-6 font-roboto font-normal"
                   dangerouslySetInnerHTML={{

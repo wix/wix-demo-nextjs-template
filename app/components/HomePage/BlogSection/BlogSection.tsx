@@ -2,6 +2,7 @@ import Link from "next/link";
 import React from "react";
 import { BLOGS_ROUTE } from "@/app/routes";
 import Image from 'next/image';
+import { PLACEHOLDER_IMAGE } from '@/app/constants';
 
 async function Blogs() {
   const items = [{
@@ -52,7 +53,7 @@ const BlogCard: React.FC<{ blog: any; index?: number }> = ({
       <div className="h-[429px] w-auto">
         <Image
           alt="placeholder"
-          src="/images/placeholder.jpg"
+          src={PLACEHOLDER_IMAGE}
           objectFit="cover"
           width={600}
           height={800}

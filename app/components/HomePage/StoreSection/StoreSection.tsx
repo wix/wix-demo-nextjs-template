@@ -1,7 +1,8 @@
 import React from "react";
 import Link from "next/link";
-import { STORE_CATEGORY_ROUTE, STORE_ROUTE } from "@/app/routes";
 import Image from 'next/image';
+import { STORE_CATEGORY_ROUTE, STORE_ROUTE } from "@/app/routes";
+import { PLACEHOLDER_IMAGE } from '@/app/constants';
 
 async function Collections() {
   const items = [{
@@ -30,7 +31,7 @@ const CollectionCard: React.FC<{
       <div className="h-[348px] w-full">
         <Image
           alt="placeholder"
-          src="/images/placeholder.jpg"
+          src={PLACEHOLDER_IMAGE}
           objectFit="cover"
           width={600}
           height={800}

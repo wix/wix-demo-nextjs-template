@@ -3,6 +3,7 @@ import {
   ImageSkeleton,
   TextSkeleton,
 } from "@/app/components/Skeletons/Skeletons";
+import { PLACEHOLDER_IMAGE } from '@/app/constants';
 
 export async function generateMetadata({ params }: any) {
   const post = {
@@ -13,7 +14,7 @@ export async function generateMetadata({ params }: any) {
         name: "placeholder",
         width: 600,
         height: 800,
-        url: "/images/placeholder.jpg",
+        url: PLACEHOLDER_IMAGE,
       },
       dishName: "placeholder",
       preparationInstructions: "placeholder",
@@ -34,7 +35,7 @@ async function Blog({ slug }: { slug: string }) {
         name: "placeholder",
         width: 600,
         height: 800,
-        url: "/images/placeholder.jpg",
+        url: PLACEHOLDER_IMAGE,
       },
       dishName: "placeholder",
       preparationInstructions: "placeholder",

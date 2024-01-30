@@ -1,5 +1,6 @@
-import ImageGallery from "@/app/components/Image/ImageGallery/ImageGallery";
 import Link from "next/link";
+import ImageGallery from "@/app/components/Image/ImageGallery/ImageGallery";
+import { PLACEHOLDER_IMAGE } from '@/app/constants';
 
 export default async function ServicePage() {
   const service = {
@@ -73,7 +74,7 @@ function ServicePageView({ service }: { service: { id: string, name: string, tag
         </div>
       ) : null}
       <section className="mt-10">
-        <ImageGallery urls={["/images/placeholder.jpg", "/images/placeholder.jpg", "/images/placeholder.jpg"]} />
+        <ImageGallery urls={[PLACEHOLDER_IMAGE, PLACEHOLDER_IMAGE, PLACEHOLDER_IMAGE]} />
       </section>
       <div className="w-full h-full pt-14 pb-10 text-center font-normal font-roboto">
         <Link href={`/calendar/${service.slug}`} className="btn-main">

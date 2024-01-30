@@ -1,11 +1,12 @@
-import { TicketsTable } from "@/app/components/Table/Table.client";
-import { Schedule } from "../../components/Schedule/Schedule";
-import ActionLink from "@/app/components/ActionLink/ActionLink";
 import Image from 'next/image';
 import React from 'react';
 import {
   endOfDay
 } from "date-fns";
+import { TicketsTable } from "@/app/components/Table/Table.client";
+import { Schedule } from "@/app/components/Schedule/Schedule";
+import ActionLink from "@/app/components/ActionLink/ActionLink";
+import { PLACEHOLDER_IMAGE } from '@/app/constants';
 
 export async function generateMetadata({ params }: any) {
   const event = {
@@ -80,7 +81,7 @@ export default async function EventPage({ params }: any) {
             <div className="">
               <Image
                 alt="blog post"
-                src="/images/placeholder.jpg"
+                src={PLACEHOLDER_IMAGE}
                 width={980}
                 height={550}
                 className="max-h-[320px] sm:h-[550px] sm:max-h-[550px]"

@@ -1,9 +1,10 @@
 "use client";
 import { ChangeEvent, useEffect, useState } from "react";
 import Link from "next/link";
+import Image from 'next/image';
 import { useUI } from "../Provider/context";
 import { Quantity } from "../Quantity/Quantity";
-import Image from 'next/image';
+import { PLACEHOLDER_IMAGE } from '@/app/constants';
 
 export const CartItem = ({
   item,
@@ -59,7 +60,7 @@ export const CartItem = ({
           <Image
             alt="line item"
             width={150} height={150}
-            src="/images/placeholder.jpg"
+            src={PLACEHOLDER_IMAGE}
           />
         </div>
         <div className="flex-1">

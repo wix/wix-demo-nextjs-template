@@ -1,8 +1,9 @@
+import React from 'react';
 import Link from "next/link";
+import Image from 'next/image';
 import ActionLink from "../ActionLink/ActionLink";
 import { WORKSHOPS_ROUTE } from "@/app/routes";
-import Image from 'next/image';
-import React from 'react';
+import { PLACEHOLDER_IMAGE } from '@/app/constants';
 
 const ALL_SERVICES_CATEGORY_ID = "ALL";
 
@@ -118,7 +119,7 @@ const ServiceCard = ({
       >
         <Image
           alt="service main"
-          src="/images/placeholder.jpg"
+          src={PLACEHOLDER_IMAGE}
           width={1060}
           height={886}
           objectFit="cover"

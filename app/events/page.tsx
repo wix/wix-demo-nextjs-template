@@ -1,10 +1,11 @@
 import React, { Suspense } from "react";
-import Link from "next/link";
-import ActionLink from "@/app/components/ActionLink/ActionLink";
 import { Metadata } from "next";
+import Link from "next/link";
+import Image from 'next/image';
+import ActionLink from "@/app/components/ActionLink/ActionLink";
 import { CardSkeleton } from "@/app/components/Skeletons/Skeletons";
 import { EVENTS_ROUTE } from "@/app/routes";
-import Image from 'next/image';
+import { PLACEHOLDER_IMAGE } from '@/app/constants';
 
 export const metadata: Metadata = {
   title: "Events",
@@ -20,7 +21,7 @@ const EventCard: React.FC<{ event: {_id: string, slug: string, title: string}; i
         <Link href={`${EVENTS_ROUTE}/${event.slug}`}>
           <Image
             alt="event image"
-            src="/images/placeholder.jpg"
+            src={PLACEHOLDER_IMAGE}
             width={690}
             height={690}
             objectFit="cover"

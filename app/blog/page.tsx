@@ -7,7 +7,7 @@ import Image from 'next/image';
 
 const placeHolderItems = [
   {
-    id: "1",
+    _id: "1",
     data: {
       ingredients: {
         id: "1",
@@ -22,7 +22,7 @@ const placeHolderItems = [
     },
   },
   {
-    id: "2",
+    _id: "2",
     data: {
       ingredients: {
         id: "2",
@@ -75,7 +75,7 @@ async function Blogs() {
 
   return (
     <div className="grid gap-x-5 gap-y-8 p-[20px] lg:grid-cols-3 max-w-[980px] mx-[auto]">
-      {items!.map((post: any, index: number) => (
+      {items!.map((post, index) => (
         <BlogCard key={post._id} blog={post} index={index} />
       ))}
     </div>

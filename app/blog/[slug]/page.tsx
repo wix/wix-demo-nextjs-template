@@ -6,7 +6,7 @@ import {
 
 export async function generateMetadata({ params }: any) {
   const post = {
-    id: "1",
+    _id: "1",
     data: {
       ingredients: {
         id: "1",
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: any) {
 
 async function Blog({ slug }: { slug: string }) {
   const post = {
-    id: "1",
+    _id: "1",
     data: {
       ingredients: {
         id: "1",

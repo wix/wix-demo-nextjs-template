@@ -1,4 +1,3 @@
-"use client"
 import Link from "next/link";
 import ActionLink from "../ActionLink/ActionLink";
 import { WORKSHOPS_ROUTE } from "@/app/routes";
@@ -39,7 +38,6 @@ export default function ServiceList({
       }
     )
   );
-  debugger;
   const selectedCategoryId = categoryId ?? ALL_SERVICES_CATEGORY_ID;
   const servicesToDisplay = services.filter(
     (service) =>

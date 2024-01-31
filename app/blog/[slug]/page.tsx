@@ -9,16 +9,10 @@ export async function generateMetadata({ params }: any) {
   const post = {
     _id: "1",
     data: {
-      ingredients: {
-        id: "1",
-        name: "placeholder",
-        width: 600,
-        height: 800,
-        url: PLACEHOLDER_IMAGE,
-      },
-      dishName: "placeholder",
-      preparationInstructions: "placeholder",
-      slug: "placeholder",
+      ingredients: PLACEHOLDER_IMAGE,
+      dishName: "item 1",
+      preparationInstructions: "Item 1 content",
+      slug: "item-1",
     },
   };
   return {
@@ -30,16 +24,10 @@ async function Blog({ slug }: { slug: string }) {
   const post = {
     _id: "1",
     data: {
-      ingredients: {
-        id: "1",
-        name: "placeholder",
-        width: 600,
-        height: 800,
-        url: PLACEHOLDER_IMAGE,
-      },
-      dishName: "placeholder",
-      preparationInstructions: "placeholder",
-      slug: "placeholder",
+      ingredients: PLACEHOLDER_IMAGE,
+      dishName: "item 1",
+      preparationInstructions: "Item 1 content",
+      slug: "item-1",
     },
   };
   return (
@@ -49,7 +37,9 @@ async function Blog({ slug }: { slug: string }) {
           <h1 className="text-[50px] text-[#2F2E2E] font-serif sm:text-5xl my-2 text-center px-5 pb-4">
             {post.data!.dishName}
           </h1>
-          this is the full description of the post
+          <p className="card-subtitle max-md:mb-8">
+            {post.data!.preparationInstructions}
+          </p>
         </div>
       ) : (
         <div className="text-3xl w-full text-center p-9 box-border">

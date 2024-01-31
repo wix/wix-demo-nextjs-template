@@ -5,13 +5,35 @@ import Image from 'next/image';
 import { PLACEHOLDER_IMAGE } from '@/app/constants';
 
 async function Blogs() {
-  const items = [{
-    id: '1', dishName: 'name 1', slug: 'name-1'
-  }, {
-    id: '2', dishName: 'name 2', slug: 'name-2'
-  }, {
-    id: '3', dishName: 'name 3', slug: 'name-3'
-  }];
+  const items = [
+    {
+      _id: "1",
+      data: {
+        ingredients: PLACEHOLDER_IMAGE,
+        dishName: "item 1",
+        preparationInstructions: "Item 1 content",
+        slug: "item-1",
+      },
+    },
+    {
+      _id: "2",
+      data: {
+        ingredients: PLACEHOLDER_IMAGE,
+        dishName: "item 2",
+        preparationInstructions: "Item 2 content",
+        slug: "item-2",
+      },
+    },
+    {
+      _id: "3",
+      data: {
+        ingredients: PLACEHOLDER_IMAGE,
+        dishName: "item 3",
+        preparationInstructions: "Item 3 content",
+        slug: "item-3",
+      },
+    },
+  ];;
 
   return (
     <div className="max-md:mb-8 grid md:gap-x-[64px] gap-y-8 md:p-[120px] p-[32px] lg:grid-cols-4 md:grid-cols-2 grid-cols-1 mx-[auto]">

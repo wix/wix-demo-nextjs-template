@@ -6,38 +6,6 @@ import { CardSkeleton } from "@/app/components/Skeletons/Skeletons";
 import { PLACEHOLDER_IMAGE } from '@/app/constants';
 import { BLOGS_ROUTE } from "@/app/routes";
 
-const placeHolderItems = [
-  {
-    _id: "1",
-    data: {
-      ingredients: {
-        id: "1",
-        name: "placeholder",
-        width: 600,
-        height: 800,
-        url: PLACEHOLDER_IMAGE,
-      },
-      dishName: "placeholder",
-      preparationInstructions: "placeholder",
-      slug: "placeholder",
-    },
-  },
-  {
-    _id: "2",
-    data: {
-      ingredients: {
-        id: "2",
-        name: "placeholder",
-        width: 600,
-        height: 800,
-        url: PLACEHOLDER_IMAGE,
-      },
-      dishName: "placeholder",
-      preparationInstructions: "placeholder",
-      slug: "placeholder",
-    },
-  },
-];
 export const metadata: Metadata = {
   title: "Blog",
   description: "",
@@ -55,7 +23,7 @@ const BlogCard: React.FC<{ blog: any; index?: number }> = ({
       <div className="h-[400px] w-full">
         <Image
           alt="blog post"
-          src={PLACEHOLDER_IMAGE}
+          src={blog.data!.ingredients}
           width={600}
           height={800}
           objectFit="cover"
@@ -65,14 +33,33 @@ const BlogCard: React.FC<{ blog: any; index?: number }> = ({
       </div>
       <h1 className="card-title">{blog.data!.dishName}</h1>
       <p className="card-subtitle max-md:mb-8">
-        this is a cutoff description...
+        {blog.data!.preparationInstructions.substring(0, 132)}...
       </p>
     </Link>
   );
 };
 
 async function Blogs() {
-  const items = placeHolderItems;
+  const items = [
+    {
+      _id: "1",
+      data: {
+        ingredients: PLACEHOLDER_IMAGE,
+        dishName: "item 1",
+        preparationInstructions: "Item content",
+        slug: "item-1",
+      },
+    },
+    {
+      _id: "2",
+      data: {
+        ingredients: PLACEHOLDER_IMAGE,
+        dishName: "item 2",
+        preparationInstructions: "Item content",
+        slug: "item-2",
+      },
+    },
+  ];;
 
   return (
     <div className="grid gap-x-5 gap-y-8 p-[20px] lg:grid-cols-3 max-w-[980px] mx-[auto]">

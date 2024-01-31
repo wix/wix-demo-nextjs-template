@@ -3,7 +3,6 @@ import React from "react";
 import { BLOGS_ROUTE } from "@/app/routes";
 import Image from 'next/image';
 import { getWixClient } from '@/app/hooks/useWixClientServer';
-import { DataItem } from '@wix/data/build/cjs/src/data-v2-data-item.universal';
 import { media } from '@wix/sdk'
 
 async function Blogs() {
@@ -42,7 +41,7 @@ async function Blogs() {
   );
 }
 
-const BlogCard: React.FC<{ blog: DataItem; index?: number }> = ({
+const BlogCard: React.FC<{ blog: any; index?: number }> = ({
                                                                   blog,
                                                                   index = -1,
                                                                 }) => {

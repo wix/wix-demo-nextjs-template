@@ -69,13 +69,13 @@ const BlogCard: React.FC<{ blog: any; index?: number }> = ({
 }) => {
   return (
     <Link
-      href={`${BLOGS_ROUTE}/${blog.slug}`}
+      href={`${BLOGS_ROUTE}/${blog.data!.slug}`}
       className="flex flex-col gap-[24px] border-0 max-md:border-b border-[#E0E0E0] max-md:pb-[42px]"
     >
       <div className="h-[429px] w-auto">
         <Image
           alt="placeholder"
-          src={PLACEHOLDER_IMAGE}
+          src={blog.data!.ingredients}
           objectFit="cover"
           width={600}
           height={800}
@@ -84,7 +84,7 @@ const BlogCard: React.FC<{ blog: any; index?: number }> = ({
         />
       </div>
       <h1 className="font-serif font-bold md:text-[24px] max-md:text-[18px] max-md:text-center leading-[27.27px]">
-        {blog.dishName}
+        {blog.data!.dishName}
       </h1>
     </Link>
   );

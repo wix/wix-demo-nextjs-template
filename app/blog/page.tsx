@@ -3,7 +3,8 @@ import { Metadata } from "next";
 import Image from 'next/image';
 import Link from "next/link";
 import { CardSkeleton } from "@/app/components/Skeletons/Skeletons";
-import { PLACEHOLDER_IMAGE } from '@/app/constants';
+import { media } from '@wix/sdk';
+import { getWixClient } from '@/app/hooks/useWixClientServer';
 import { BLOGS_ROUTE } from "@/app/routes";
 
 export const metadata: Metadata = {
@@ -23,7 +24,7 @@ const BlogCard: React.FC<{ blog: any; index?: number }> = ({
       <div className="h-[400px] w-full">
         <Image
           alt="blog post"
-          src={blog.data!.ingredients}
+          src={media.getScaledToFillImageUrl(blog.data!.ingredients, 600, 800, {})}
           width={600}
           height={800}
           objectFit="cover"
@@ -40,26 +41,11 @@ const BlogCard: React.FC<{ blog: any; index?: number }> = ({
 };
 
 async function Blogs() {
-  const items = [
-    {
-      _id: "1",
-      data: {
-        ingredients: PLACEHOLDER_IMAGE,
-        dishName: "item 1",
-        preparationInstructions: "Item content",
-        slug: "item-1",
-      },
-    },
-    {
-      _id: "2",
-      data: {
-        ingredients: PLACEHOLDER_IMAGE,
-        dishName: "item 2",
-        preparationInstructions: "Item content",
-        slug: "item-2",
-      },
-    },
-  ];;
+  const wixClient = await getWixClient();
+  const { items } = await wixClient.items.queryDataItems({
+    dataCollectionId: "FarmToTableRecipes"
+  })
+    .find();
 
   return (
     <div className="grid gap-x-5 gap-y-8 p-[20px] lg:grid-cols-3 max-w-[980px] mx-[auto]">

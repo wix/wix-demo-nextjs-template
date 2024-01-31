@@ -1,4 +1,5 @@
 import { createClient, OAuthStrategy } from "@wix/sdk";
+import { items } from "@wix/data";
 import { redirects } from "@wix/redirects";
 import { cookies } from "next/headers";
 import { WIX_REFRESH_TOKEN } from '@/app/constants';
@@ -14,6 +15,7 @@ export const getWixClient = async () => {
   const wixClient = createClient({
     modules: {
       redirects,
+      items,
     },
     auth: OAuthStrategy({
       clientId: process.env.NEXT_PUBLIC_WIX_CLIENT_ID!,

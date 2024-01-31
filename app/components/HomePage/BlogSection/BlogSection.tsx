@@ -2,38 +2,17 @@ import Link from "next/link";
 import React from "react";
 import { BLOGS_ROUTE } from "@/app/routes";
 import Image from 'next/image';
-import { PLACEHOLDER_IMAGE } from '@/app/constants';
+import { getWixClient } from '@/app/hooks/useWixClientServer';
+import { DataItem } from '@wix/data/build/cjs/src/data-v2-data-item.universal';
+import { media } from '@wix/sdk'
 
 async function Blogs() {
-  const items = [
-    {
-      _id: "1",
-      data: {
-        ingredients: PLACEHOLDER_IMAGE,
-        dishName: "item 1",
-        preparationInstructions: "Item 1 content",
-        slug: "item-1",
-      },
-    },
-    {
-      _id: "2",
-      data: {
-        ingredients: PLACEHOLDER_IMAGE,
-        dishName: "item 2",
-        preparationInstructions: "Item 2 content",
-        slug: "item-2",
-      },
-    },
-    {
-      _id: "3",
-      data: {
-        ingredients: PLACEHOLDER_IMAGE,
-        dishName: "item 3",
-        preparationInstructions: "Item 3 content",
-        slug: "item-3",
-      },
-    },
-  ];;
+  const wixClient = await getWixClient();
+  const { items } = await wixClient.items.queryDataItems({
+    dataCollectionId: "FarmToTableRecipes"
+  }).limit(3)
+    .ascending("createdAt")
+    .find();
 
   return (
     <div className="max-md:mb-8 grid md:gap-x-[64px] gap-y-8 md:p-[120px] p-[32px] lg:grid-cols-4 md:grid-cols-2 grid-cols-1 mx-[auto]">
@@ -63,22 +42,22 @@ async function Blogs() {
   );
 }
 
-const BlogCard: React.FC<{ blog: any; index?: number }> = ({
-  blog,
-  index = -1,
-}) => {
+const BlogCard: React.FC<{ blog: DataItem; index?: number }> = ({
+                                                                  blog,
+                                                                  index = -1,
+                                                                }) => {
   return (
     <Link
       href={`${BLOGS_ROUTE}/${blog.data!.slug}`}
       className="flex flex-col gap-[24px] border-0 max-md:border-b border-[#E0E0E0] max-md:pb-[42px]"
     >
-      <div className="h-[429px] w-auto">
+      <div className="h-[430px] w-auto">
         <Image
           alt="placeholder"
-          src={blog.data!.ingredients}
+          src={media.getScaledToFillImageUrl(blog.data!.ingredients, 340, 430, {})}
           objectFit="cover"
-          width={600}
-          height={800}
+          width={340}
+          height={430}
           sizes="(max-width: 768px) 100vw, 33vw"
           priority={index != -1 && index < 3}
         />

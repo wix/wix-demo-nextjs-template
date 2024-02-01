@@ -3,15 +3,24 @@ import {
   ImageSkeleton,
   TextSkeleton,
 } from "@/app/components/Skeletons/Skeletons";
-import { getWixClient } from '@/app/hooks/useWixClientServer';
+import { createClient, OAuthStrategy } from '@wix/sdk';
+import { items as itemsSDK } from '@wix/data';
 import RichContentViewer from '@/app/components/RichContentViewer/RichContentViewer';
 
+const wixClient = createClient({
+  modules: {
+    itemsSDK,
+  },
+  auth: OAuthStrategy({
+    clientId: process.env.NEXT_PUBLIC_WIX_CLIENT_ID!,
+  }),
+});
+
 export async function generateMetadata({ params }: any) {
-  const wixClient = await getWixClient();
-  const { items } = await wixClient.items.queryDataItems({
+  const { items } = await wixClient.itemsSDK.queryDataItems({
     dataCollectionId: "FarmToTableRecipes"
   })
-    .eq('data.slug', params.slug)
+    .eq('slug', params.slug)
     .find();
   const post = items[0];
 
@@ -21,8 +30,7 @@ export async function generateMetadata({ params }: any) {
 }
 
 async function Blog({ slug }: { slug: string }) {
-  const wixClient = await getWixClient();
-  const { items } = await wixClient.items.queryDataItems({
+  const { items } = await wixClient.itemsSDK.queryDataItems({
     dataCollectionId: "FarmToTableRecipes"
   })
     .eq('slug', slug)

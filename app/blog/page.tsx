@@ -3,9 +3,18 @@ import { Metadata } from "next";
 import Image from 'next/image';
 import Link from "next/link";
 import { CardSkeleton } from "@/app/components/Skeletons/Skeletons";
-import { media } from '@wix/sdk';
-import { getWixClient } from '@/app/hooks/useWixClientServer';
+import { createClient, media, OAuthStrategy } from '@wix/sdk';
+import { items as itemsSDK } from '@wix/data';
 import { BLOGS_ROUTE } from "@/app/routes";
+
+const wixClient = createClient({
+  modules: {
+    itemsSDK,
+  },
+  auth: OAuthStrategy({
+    clientId: process.env.NEXT_PUBLIC_WIX_CLIENT_ID!,
+  }),
+});
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -41,8 +50,7 @@ const BlogCard: React.FC<{ blog: any; index?: number }> = ({
 };
 
 async function Blogs() {
-  const wixClient = await getWixClient();
-  const { items } = await wixClient.items.queryDataItems({
+  const { items } = await wixClient.itemsSDK.queryDataItems({
     dataCollectionId: "FarmToTableRecipes"
   })
     .find();

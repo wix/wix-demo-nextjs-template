@@ -2,12 +2,20 @@ import Link from "next/link";
 import React from "react";
 import { BLOGS_ROUTE } from "@/app/routes";
 import Image from 'next/image';
-import { getWixClient } from '@/app/hooks/useWixClientServer';
-import { media } from '@wix/sdk'
+import { createClient, media, OAuthStrategy } from '@wix/sdk';
+import { items as itemsSDK } from '@wix/data';
+
+const wixClient = createClient({
+  modules: {
+    itemsSDK,
+  },
+  auth: OAuthStrategy({
+    clientId: process.env.NEXT_PUBLIC_WIX_CLIENT_ID!,
+  }),
+});
 
 async function Blogs() {
-  const wixClient = await getWixClient();
-  const { items } = await wixClient.items.queryDataItems({
+  const { items } = await wixClient.itemsSDK.queryDataItems({
     dataCollectionId: "FarmToTableRecipes"
   }).limit(3)
     .ascending("createdAt")

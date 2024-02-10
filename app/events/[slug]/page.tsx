@@ -1,17 +1,28 @@
-import Image from 'next/image';
-import React from 'react';
-import {
-  endOfDay
-} from "date-fns";
+import { wixEvents } from "@wix/events";
+import { WixMediaImage } from "@/app/components/Image/WixMediaImage";
+import { formatDate } from "@/app/utils/date-formatter";
 import { TicketsTable } from "@/app/components/Table/Table.client";
-import { Schedule } from "@/app/components/Schedule/Schedule";
+import { getWixClient } from '@/app/model/auth/auth';
+import { Schedule } from "../../components/Schedule/Schedule";
+import { TicketDefinitionExtended } from "../../types/ticket";
 import ActionLink from "@/app/components/ActionLink/ActionLink";
-import { PLACEHOLDER_IMAGE } from '@/app/constants';
+import Link from "next/link";
 
 export async function generateMetadata({ params }: any) {
-  const event = {
-    _id: "1", slug: "event-1", title: "Event 1"
-  };
+  const wixClient = getWixClient();
+  const { events } = await wixClient.wixEvents.queryEventsV2({
+    fieldset: [
+      wixEvents.EventFieldset.FULL,
+      wixEvents.EventFieldset.DETAILS,
+      wixEvents.EventFieldset.TEXTS,
+      wixEvents.EventFieldset.REGISTRATION,
+    ],
+    query: {
+      filter: { slug: decodeURIComponent(params.slug) },
+      paging: { limit: 1, offset: 0 },
+    },
+  });
+  const event = events?.length ? events![0] : null;
   return {
     title: event ? event.title : params.slug,
   };
@@ -21,42 +32,49 @@ export default async function EventPage({ params }: any) {
   if (!params.slug) {
     return;
   }
-  const event = {
-    _id: "1", slug: "event-1", title: "Event Name", description: "Event Description", about: "About the Event"
-  };
+  const wixClient = getWixClient();
+  const { events } = await wixClient.wixEvents.queryEventsV2({
+    fieldset: [
+      wixEvents.EventFieldset.FULL,
+      wixEvents.EventFieldset.DETAILS,
+      wixEvents.EventFieldset.TEXTS,
+      wixEvents.EventFieldset.REGISTRATION,
+    ],
+    query: {
+      filter: { slug: decodeURIComponent(params.slug) },
+      paging: { limit: 1, offset: 0 },
+    },
+  });
+  const event = events?.length ? events![0] : null;
 
-  const tickets = [{
-    _id: "1", name: "Event Name 1", description: "Event Description", price: 13, canPurchase: true, limitPerCheckout: 5, options: [{
-      _id: "1", price: 4, name: "option 1"
-    }, {
-      _id: "2", price: 5, name: "option 2"
-    }, {
-      _id: "3", price: 6, name: "option 3"
-    }]
-  }, {
-    _id: "2", name: "Event Name 2", description: "Event Description", price: 13, canPurchase: true, limitPerCheckout: 5, options: [{
-      _id: "1", price: 4, name: "option 1"
-    }, {
-      _id: "2", price: 5, name: "option 2"
-    }, {
-      _id: "3", price: 6, name: "option 3"
-    }]
-  }, {
-    _id: "3", name: "Event Name 3", description: "Event Description", price: 13, canPurchase: true, limitPerCheckout: 5, options: [{
-      _id: "1", price: 4, name: "option 1"
-    }, {
-      _id: "2", price: 5, name: "option 2"
-    }, {
-      _id: "3", price: 6, name: "option 3"
-    }]
-  }];
-  const schedule = {items: [{
-      _id: "1", start: new Date().toISOString(), end: endOfDay(new Date()).toISOString(), name: "Schedule item 1", stageName: "stage name 1"
-    }, {
-      _id: "2", start: new Date().toISOString(), end: endOfDay(new Date()).toISOString(), name: "Schedule item 2", stageName: "stage name 2"
-    }, {
-      _id: "3", start: new Date().toISOString(), end: endOfDay(new Date()).toISOString(), name: "Schedule item 3", stageName: "stage name 3"
-    }]};
+  const tickets =
+    event &&
+    ((
+      await wixClient.checkout.queryAvailableTickets({
+        filter: { eventId: event._id },
+        offset: 0,
+        limit: 100,
+        sort: "orderIndex:asc",
+      })
+    ).definitions?.map((ticket) => ({
+      ...ticket,
+      canPurchase:
+        ticket.limitPerCheckout! > 0 &&
+        (!ticket.salePeriod ||
+          (new Date(ticket.salePeriod.endDate!) > new Date() &&
+            new Date(ticket.salePeriod.startDate!) < new Date())),
+    })) as TicketDefinitionExtended[]);
+  let schedule;
+  try {
+    schedule =
+      event &&
+      (await wixClient.schedule.listScheduleItems({
+        eventId: [event._id!],
+        limit: 100,
+      }));
+  } catch (e) {
+    console.log(e);
+  }
 
   return (
     <div className="mx-auto px-4 sm:px-14">
@@ -65,23 +83,52 @@ export default async function EventPage({ params }: any) {
           <div className="flex flex-col gap-4 max-w-6xl items-lef items-center mx-auto">
             <div className="text-center px-5 pb-4">
               <span className="font-roboto font-normal text-[16px] leading-[20.8px]">
-                23:00 PM | Central Park
+                {formatDate(
+                  new Date(event.scheduling?.config?.startDate!),
+                  event!.scheduling!.config!.timeZoneId!
+                ) || event.scheduling?.formatted}{" "}
+                | {event.location?.name}
               </span>
               <h3 className="my-2 mt-[30px] text-[50px] font-bold leading-[56.81px]">
                 {event.title}
               </h3>
               <h5 className="my-4 sm:my-6">{event.description}</h5>
-              <ActionLink
-                href={`/events/${event.slug}#tickets`}
-                className={"max-md:my-2 inline-block"}
-              >
-                Buy Tickets
-              </ActionLink>
+              {event.registration?.status ===
+                wixEvents.RegistrationStatus.OPEN_TICKETS && (
+                  <ActionLink
+                    href={`/events/${event.slug}#tickets`}
+                    className={"max-md:my-2 inline-block"}
+                  >
+                    Buy Tickets
+                  </ActionLink>
+                )}
+              {event.registration?.status ===
+                wixEvents.RegistrationStatus.OPEN_EXTERNAL && (
+                  <Link
+                    className="btn-main inline-block w-full sm:w-auto text-center"
+                    href={event.registration.external!.registration}
+                  >
+                    Buy Tickets
+                  </Link>
+                )}
+              {[
+                wixEvents.RegistrationStatus.CLOSED_MANUALLY,
+                wixEvents.RegistrationStatus.CLOSED,
+              ].includes(event.registration?.status!) && (
+                <div>
+                  <p className="border-2 inline-block p-3">
+                    Registration is closed
+                    <br />
+                    <Link href="/" className="underline">
+                      See other events
+                    </Link>
+                  </p>
+                </div>
+              )}
             </div>
             <div className="">
-              <Image
-                alt="blog post"
-                src={PLACEHOLDER_IMAGE}
+              <WixMediaImage
+                media={event.mainImage}
                 width={980}
                 height={550}
                 className="max-h-[320px] sm:h-[550px] sm:max-h-[550px]"
@@ -94,9 +141,9 @@ export default async function EventPage({ params }: any) {
                   time & location
                 </h4>
                 <p className="leading-[26.1px] font-roboto font-normal text-[18px]">
-                  23:00 PM
+                  {event.scheduling?.startDateFormatted}
                   <br />
-                  Central Park
+                  {event.location?.address}
                 </p>
               </div>
               <hr className="h-[2px] mx-auto my-4 bg-[#E0E0E0] border-0 md:my-10  w-full" />
@@ -119,12 +166,25 @@ export default async function EventPage({ params }: any) {
                   <Schedule items={schedule.items} slug={event.slug!} />
                 </div>
               ) : null}
-              <div className="my-4 sm:my-10">
-                <h4 className="mt-7 md:text-3xl leading-[34.09px] font-bold capitalize">
-                  Tickets
-                </h4>
-                <TicketsTable tickets={tickets} event={event} />
-              </div>
+              {event.registration?.external && (
+                <ActionLink
+                  href={event.registration?.external.registration}
+                  className={"my-10 inline-block"}
+                >
+                  Buy Tickets
+                </ActionLink>
+              )}
+              {[
+                wixEvents.RegistrationStatus.CLOSED_MANUALLY,
+                wixEvents.RegistrationStatus.OPEN_TICKETS,
+              ].includes(event.registration?.status!) && (
+                <div className="my-4 sm:my-10">
+                  <h4 className="mt-7 md:text-3xl leading-[34.09px] font-bold capitalize">
+                    Tickets
+                  </h4>
+                  <TicketsTable tickets={tickets!} event={event} />
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -138,5 +198,22 @@ export default async function EventPage({ params }: any) {
 }
 
 export async function generateStaticParams(): Promise<{ slug?: string }[]> {
-  return [{slug: 'event-1'}, {slug: 'event-2'}, {slug: 'event-3'}];
+  const wixClient = getWixClient();
+  return wixClient.wixEvents
+    .queryEventsV2({
+      fieldset: [wixEvents.EventFieldset.FULL],
+      query: {
+        paging: { limit: 10, offset: 0 },
+        sort: [{ fieldName: "start", order: wixEvents.SortOrder.ASC }],
+      },
+    })
+    .then(({ events }) => {
+      return events!.map((event) => ({
+        slug: event.slug,
+      }));
+    })
+    .catch((err) => {
+      console.error(err);
+      return [];
+    });
 }

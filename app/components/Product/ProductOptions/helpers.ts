@@ -1,8 +1,10 @@
+import { products } from "@wix/stores";
+
 export type SelectedOptions = Record<string, string | null>;
 import { Dispatch, SetStateAction } from "react";
 
 export function selectDefaultOptionFromProduct(
-  product: {productOptions: {name: string, choices: {description: string}[]}[]},
+  product: products.Product,
   updater: Dispatch<SetStateAction<SelectedOptions>>
 ) {
   // Selects the default option

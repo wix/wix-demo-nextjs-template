@@ -2,23 +2,18 @@ import ServiceList from "@/app/components/ServiceList/ServiceList";
 import React, { Suspense } from "react";
 import { Metadata } from "next";
 import { ImageSkeleton, TextSkeleton } from "../components/Skeletons/Skeletons";
+import { getWixClient } from '@/app/model/auth/auth';
+import { safeGetServices } from "@/app/model/service/service-api";
 
 export const metadata: Metadata = {
   title: "Workshops",
 };
 
 async function BookNow({ categoryId }: any) {
-  const services = [{
-    id: "1", slug: "service-1", name: "name 1", tagLine: "tagline 1", duration: "1 hr", categoryId: '1', categoryName: "category 1",
-  }, {
-    id: "2", slug: "service-2", name: "name 2", tagLine: "tagline 2", duration: "1.5 hr", categoryId: '1', categoryName: "category 1",
-  }, {
-    id: "3", slug: "service-3", name: "name 3", tagLine: "tagline 3", duration: "3 min", categoryId: '2', categoryName: "category 2",
-  }, {
-    id: "4", slug: "service-4", name: "name 4", tagLine: "tagline 4", duration: "45 min", categoryId: '3', categoryName: "category 3",
-  }, {
-    id: "5", slug: "service-5", name: "name 5", tagLine: "tagline 5", duration: "3 hr", categoryId: '3', categoryName: "category 3",
-  }];
+  const wixClient = getWixClient();
+  const {
+    data: { services },
+  } = await safeGetServices(wixClient);
 
   return <ServiceList categoryId={categoryId} services={services} />;
 }

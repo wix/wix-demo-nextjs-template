@@ -1,20 +1,21 @@
 "use client";
 import React, { FC } from "react";
 import Link from "next/link";
+import { collections } from "@wix/stores";
 import { Dropdown } from "flowbite-react";
 import { STORE_ROUTE } from "@/app/routes";
 
 export interface ProductCategoriesProps {
-  collections: {_id: string, name: string, slug: string}[];
+  collections: collections.Collection[];
   selectedCollectionId?: string;
 }
 
 const ALL_ITEMS_ID = "00000000-000000-000000-000000000001";
 
 export const ProductCategories: FC<ProductCategoriesProps> = ({
-  collections,
-  selectedCollectionId = ALL_ITEMS_ID,
-}) => {
+                                                                collections,
+                                                                selectedCollectionId = ALL_ITEMS_ID,
+                                                              }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const toggleDropdown = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -29,6 +30,7 @@ export const ProductCategories: FC<ProductCategoriesProps> = ({
         </legend>
         <div className="flex flex-col mt-5 gap-3">
           {collections
+            .filter(({ visible }) => visible)
             .map((collection) => {
               const checked = selectedCollectionId === collection._id;
               return (
@@ -98,6 +100,7 @@ export const ProductCategories: FC<ProductCategoriesProps> = ({
           }}
         >
           {collections
+            .filter(({ visible }) => visible)
             .map((collection) => {
               const checked = selectedCollectionId === collection._id;
               return (

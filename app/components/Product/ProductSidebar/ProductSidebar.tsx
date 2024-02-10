@@ -1,52 +1,112 @@
 "use client";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
+import { products } from "@wix/stores";
 import { ProductOptions } from "../ProductOptions/ProductOptions";
 import { Accordion, Flowbite } from "flowbite-react";
 import { selectDefaultOptionFromProduct } from "../ProductOptions/helpers";
 import { useUI } from "../../Provider/context";
+import { useAddItemToCart } from "@/app/hooks/useAddItemToCart";
 import { HiArrowDown } from "react-icons/hi";
 import { Quantity } from "../../Quantity/Quantity";
 import { ProductTag } from "../ProductTag/ProductTag";
+import { usePrice } from "@/app/hooks/usePrice";
+import { BackInStockFormModal } from "../../BackInStockFormModal/BackInStockFormModal";
+import { STORES_APP_ID } from "@/app/constants";
 import Link from "next/link";
 
 interface ProductSidebarProps {
-  product: {
-    name: string, sku: string,
-    additionalInfoSections: {title: string, description: string}[],
-    productOptions: {optionType: string,name: string, choices: {description: string, value: string}[]}[]
-  };
+  product: products.Product;
   className?: string;
 }
 
 const createProductOptions = (
   selectedOptions?: any,
-  selectedVariant?: {_id: string}
+  selectedVariant?: products.Variant
 ) =>
   Object.keys(selectedOptions ?? {}).length
     ? {
-        options: selectedVariant?._id
-          ? { variantId: selectedVariant!._id }
-          : { options: selectedOptions },
-      }
+      options: selectedVariant?._id
+        ? { variantId: selectedVariant!._id }
+        : { options: selectedOptions },
+    }
     : undefined;
 
 export const ProductSidebar: FC<ProductSidebarProps> = ({ product }) => {
-  const { openModalBackInStock } = useUI();
+  const addItem = useAddItemToCart();
+  const { openSidebar, openModalBackInStock } = useUI();
   const [loading, setLoading] = useState(false);
   const [quantity, setQuantity] = useState<number>(1);
+  const [selectedVariant, setSelectedVariant] = useState<products.Variant>({});
   const [selectedOptions, setSelectedOptions] = useState<any>({});
 
-  const price = "55$";
+  const price = usePrice({
+    amount: selectedVariant?.variant?.priceData?.price || product.price!.price!,
+    currencyCode: product.price!.currency!,
+  });
+
+  useEffect(() => {
+    if (
+      product.manageVariants &&
+      Object.keys(selectedOptions).length === product.productOptions?.length
+    ) {
+      const variant = product.variants?.find((variant) =>
+        Object.keys(variant.choices!).every(
+          (choice) => selectedOptions[choice] === variant.choices![choice]
+        )
+      );
+      setSelectedVariant(variant!);
+    }
+    setQuantity(1);
+  }, [selectedOptions]);
 
   useEffect(() => {
     selectDefaultOptionFromProduct(product, setSelectedOptions);
   }, [product]);
 
-  const addToCart = async () => {};
+  const isAvailableForPurchase = useMemo(() => {
+    if (!product.manageVariants && product.stock?.inStock) {
+      return true;
+    }
+    if (!product.manageVariants && !product.stock?.inStock) {
+      return false;
+    }
+
+    return selectedVariant?.stock?.inStock;
+  }, [selectedVariant, product]);
+
+  const addToCart = async () => {
+    setLoading(true);
+    try {
+      await addItem({
+        quantity,
+        catalogReference: {
+          catalogItemId: product._id!,
+          appId: STORES_APP_ID,
+          ...createProductOptions(selectedOptions, selectedVariant),
+        },
+      });
+      setLoading(false);
+      openSidebar();
+    } catch (err) {
+      setLoading(false);
+    }
+  };
 
   const notifyWhenAvailable = async () => {
     openModalBackInStock(product);
   };
+
+  const buyNowLink = useMemo(() => {
+    const productOptions = createProductOptions(
+      selectedOptions,
+      selectedVariant
+    );
+    return `/api/quick-buy/${product._id}?quantity=${quantity}&productOptions=${
+      productOptions
+        ? decodeURIComponent(JSON.stringify(productOptions.options))
+        : ""
+    }`;
+  }, [selectedOptions, selectedVariant, product._id, quantity]);
   const flowBiteCss = `
     p {
         font-weight: 400;
@@ -55,13 +115,13 @@ export const ProductSidebar: FC<ProductSidebarProps> = ({ product }) => {
   return (
     <>
       <ProductTag
-        name={product.name}
+        name={product.name!}
         price={price}
-        sku={product.sku}
+        sku={product.sku ?? undefined}
       />
       <div className="mt-2">
         <ProductOptions
-          options={product.productOptions}
+          options={product.productOptions!}
           selectedOptions={selectedOptions}
           setSelectedOptions={setSelectedOptions}
         />
@@ -73,32 +133,55 @@ export const ProductSidebar: FC<ProductSidebarProps> = ({ product }) => {
         <div className="mt-2">
           <Quantity
             value={quantity}
-            max={9999}
+            max={
+              (selectedVariant?.stock?.trackQuantity
+                ? selectedVariant?.stock?.quantity
+                : product.stock?.quantity!) ?? 9999
+            }
             handleChange={(e) => setQuantity(Number(e.target.value))}
             increase={() => setQuantity(1 + quantity)}
             decrease={() => setQuantity(quantity - 1)}
           />
         </div>
       </div>
-      <div>
-        <button
-          aria-label="Add to Cart"
-          className="btn-main w-full my-1 font-roboto font-normal"
-          type="button"
-          onClick={addToCart}
-          disabled={loading}
-        >
-          Add to Cart
-        </button>
-        <div className="w-full pt-2">
-          <Link
-            className="btn-main w-full my-1 block text-center font-roboto font-normal"
-            href="/"
+      {isAvailableForPurchase ? (
+        <div>
+          <button
+            aria-label="Add to Cart"
+            className="btn-main w-full my-1 font-roboto font-normal"
+            type="button"
+            onClick={addToCart}
+            disabled={loading}
           >
-            Buy Now
-          </Link>
+            Add to Cart
+          </button>
+          <div className="w-full pt-2">
+            <Link
+              className="btn-main w-full my-1 block text-center font-roboto font-normal"
+              href={buyNowLink}
+            >
+              Buy Now
+            </Link>
+          </div>
         </div>
-      </div>
+      ) : null}
+      {!isAvailableForPurchase ? (
+        <div>
+          <BackInStockFormModal
+            product={product}
+            variantId={selectedVariant._id}
+          />
+          <button
+            aria-label="Notify When Available"
+            className="btn-main w-full my-1 rounded-2xl text-2xl"
+            type="button"
+            onClick={notifyWhenAvailable}
+            disabled={loading}
+          >
+            Notify When Available
+          </button>
+        </div>
+      ) : null}
       <div className="mt-6">
         <style>{flowBiteCss}</style>
         <Flowbite

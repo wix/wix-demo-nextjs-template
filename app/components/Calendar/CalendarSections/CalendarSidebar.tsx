@@ -1,37 +1,58 @@
 "use client";
+import { ServiceInfoViewModel } from "@/app/model/service/service.mapper";
 import { useCallback, useEffect, useState } from "react";
 import { format } from "date-fns";
 
+import { useServiceFormattedPrice } from "@/app/hooks/useServiceFormattedPrice";
 import { SlotViewModel } from "@/app/components/Calendar/CalendarSections/CalendarSlots";
+import type { availabilityCalendar } from "@wix/bookings";
+import { createRedirectCallbacks } from "@/app/model/redirects/redirect.utils";
+import { useWixClient } from "@/app/hooks/useWixClient";
+import { RedirectSession } from "@wix/redirects/build/es/src/headless-v1-redirect-session.types";
 
 const CalendarSidebar = ({
-  service,
-  selectedDate,
-  selectedTime,
-  slotsForTime,
-  timezone,
-}: {
-  service: { id: string, name: string, duration: string };
+                           service,
+                           selectedDate,
+                           selectedTime,
+                           slotsForTime,
+                           timezone,
+                         }: {
+  service: ServiceInfoViewModel;
   selectedDate: Date;
   selectedTime: string;
   timezone: string;
   slotsForTime: SlotViewModel[];
   selectedSlot?: SlotViewModel["slotAvailability"];
 }) => {
+  const wixClient = useWixClient();
   const [selectedSlot, setSelectedSlot] = useState<
-  {
-    bookable: boolean,
-    bookingPolicyViolations?: { tooLateToBook: boolean }
-  } | undefined
+    availabilityCalendar.SlotAvailability | undefined
   >();
   const [redirecting, setRedirecting] = useState<boolean>(false);
-  const formattedPrice = "13$";
+  const formattedPrice = useServiceFormattedPrice(
+    service.payment!.paymentDetails
+  );
   const goToCheckout = useCallback(() => {
     setRedirecting(true);
-    setTimeout(() => {
-      setRedirecting(false);
-    }, 2000);
-  }, [selectedSlot, service.id, timezone]);
+    wixClient!.redirects
+      .createRedirectSession({
+        bookingsCheckout: {
+          slotAvailability: selectedSlot!,
+          timezone,
+        },
+        callbacks: createRedirectCallbacks({ baseUrl: window.location.origin }),
+      })
+      .then(({ redirectSession }) => {
+        window.location.assign(redirectSession!.fullUrl!);
+        setTimeout(() => {
+          setRedirecting(false);
+        }, 2000);
+      })
+      .catch((e: any) => {
+        console.error(e);
+        setRedirecting(false);
+      });
+  }, [selectedSlot, service.id, wixClient, timezone]);
   useEffect(() => {
     setSelectedSlot(
       slotsForTime?.length === 1
@@ -48,15 +69,15 @@ const CalendarSidebar = ({
         <h2 className="text-lg">Booking Summary</h2>
       </div>
       <section className="mt-4">
-        <div>{service.name}</div>
+        <div>{service.info.name}</div>
         <div>
           {format(selectedDate, "d MMMM yyyy")}
           {selectedTime ? " at " + selectedTime : ""}
         </div>
         <section className="text-xs mt-1">
-          <div>{service.duration}</div>
+          <div>{service.info.formattedDuration}</div>
           <div className="font-serif font-normal">
-            {formattedPrice}
+            {formattedPrice.userFormattedPrice}
           </div>
           {slotsForTime.length > 1 ? (
             <>
@@ -83,15 +104,19 @@ const CalendarSidebar = ({
                     disabled={!slotOption.slotAvailability.bookable}
                     value={index}
                   >
-                    Central Park with John Doe
+                    {`${
+                      slotOption.slotAvailability.slot?.location?.name ?? ""
+                    } with ${
+                      slotOption.slotAvailability.slot?.resource?.name ?? ""
+                    }`.trim()}
                   </option>
                 ))}
               </select>
             </>
           ) : selectedSlot ? (
             <>
-              <div>John Doe</div>
-              <div>Central Park</div>
+              <div>{selectedSlot.slot?.resource?.name}</div>
+              <div>{selectedSlot.slot?.location?.name}</div>
             </>
           ) : null}
         </section>

@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: any) {
   const { items } = await wixClient.itemsSDK.queryDataItems({
     dataCollectionId: "FarmToTableRecipes"
   })
-    .eq('slug', params.slug)
+    .eq('data.slug', params.slug)
     .find();
   const post = items[0];
 

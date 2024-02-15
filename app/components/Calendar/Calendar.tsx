@@ -1,23 +1,14 @@
 "use client";
 import { Suspense, useEffect, useMemo, useState } from "react";
-import { Spinner } from "flowbite-react";
-import { availabilityCalendar } from "@wix/bookings";
 import {
   addMonths,
-  endOfDay,
   format,
   formatISO,
   isSameDay,
-  startOfDay,
   startOfMonth,
 } from "date-fns";
 import { DayPicker } from "react-day-picker";
-import { ServiceInfoViewModel } from "@/app/model/service/service.mapper";
-import { useAvailability } from "@/app/hooks/useAvailability";
-import {
-  useFormattedTimezone,
-  useUserTimezone,
-} from "@/app/hooks/useFormattedTimezone";
+import { Spinner } from "flowbite-react";
 import CalendarSlots, {
   SlotViewModel,
 } from "@/app/components/Calendar/CalendarSections/CalendarSlots";
@@ -32,31 +23,18 @@ const getCalendarMonthRangeForDate = (date: Date): CalendarDateRange => {
   };
 };
 
-const formatSlot = (slotAvailability: availabilityCalendar.SlotAvailability) =>
-  format(new Date(slotAvailability.slot!.startDate!), TIME_FORMAT);
-
 const TIME_FORMAT = "hh:mm a";
 
-export function CalendarView({ service }: { service: ServiceInfoViewModel }) {
+export function CalendarView({ service }: { service: { id: string, name: string, duration: string } }) {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [dateRange, setDateRange] = useState<CalendarDateRange>(
     getCalendarMonthRangeForDate(selectedDate!)
   );
-  const { data: rangeData, isLoading: isRangeDataLoading } = useAvailability({
-    serviceId: service.id!,
-    ...dateRange,
-    slotsPerDay: 1,
-    limit: 42, // 6 weeks
-  });
-  const { data: dayData, isLoading: isDayDataLoading } = useAvailability({
-    serviceId: service.id!,
-    from: formatISO(startOfDay(selectedDate)),
-    to: formatISO(endOfDay(selectedDate)),
-  });
-  const timezone = useUserTimezone();
-  const timezoneStr = useFormattedTimezone(timezone);
+  const availabilityEntries = [{startDate: new Date(), bookable: false}]
+  const timezone = "Etc/UTC";
+  const timezoneStr = "Coordinated Universal Time (UTC+0)";
   useEffect(() => {
     // re-fetching existing range is cached
     setDateRange(getCalendarMonthRangeForDate(selectedDate!));
@@ -65,15 +43,15 @@ export function CalendarView({ service }: { service: ServiceInfoViewModel }) {
 
   const slotsMap: { [key: string]: SlotViewModel[] } = useMemo(() => {
     return (
-      dayData?.availabilityEntries
+      availabilityEntries
         ?.sort(
           (dayDataA, dayDataB) =>
-            new Date(dayDataA.slot?.startDate ?? 0).getTime() -
-            new Date(dayDataB.slot?.startDate ?? 0).getTime()
+            new Date(dayDataA.startDate ?? 0).getTime() -
+            new Date(dayDataB.startDate ?? 0).getTime()
         )
         .map((slotData) => ({
           formattedTime: format(
-            new Date(slotData.slot!.startDate!),
+            new Date(slotData.startDate!),
             TIME_FORMAT
           ),
           slotAvailability: slotData,
@@ -86,20 +64,15 @@ export function CalendarView({ service }: { service: ServiceInfoViewModel }) {
           return acc;
         }, {}) ?? {}
     );
-  }, [dayData]);
-  const showLoader = useMemo(
-    () =>
-      isDayDataLoading ||
-      (!dayData?.availabilityEntries?.length && isRangeDataLoading),
-    [isDayDataLoading, isRangeDataLoading, dayData]
-  );
+  }, []);
+  const showLoader = false;
   const nextAvailableDate = useMemo(
     () =>
-      rangeData?.availabilityEntries
+      availabilityEntries
         ?.filter(({ bookable }) => bookable)
-        .map(({ slot }) => new Date(slot!.startDate!))
+        .map(({ startDate }) => new Date(startDate!))
         .find((dateWithSlots) => dateWithSlots > selectedDate),
-    [selectedDate, rangeData]
+    [selectedDate]
   );
 
   return (
@@ -114,8 +87,8 @@ export function CalendarView({ service }: { service: ServiceInfoViewModel }) {
             <DayPicker
               modifiers={{
                 daysWithSlots: (date: Date | number) =>
-                  !!rangeData?.availabilityEntries?.some(({ slot }) =>
-                    isSameDay(date, new Date(slot!.startDate!))
+                  !!availabilityEntries?.some(({ startDate }) =>
+                    isSameDay(date, new Date(startDate!))
                   ),
               }}
               modifiersClassNames={{
@@ -138,7 +111,7 @@ export function CalendarView({ service }: { service: ServiceInfoViewModel }) {
               <div className="w-full h-36 flex items-center justify-center">
                 <Spinner color="gray" />
               </div>
-            ) : dayData?.availabilityEntries?.length ? (
+            ) : availabilityEntries?.length ? (
               <div className="grid grid-cols-auto-sm gap-2 pt-4">
                 <CalendarSlots
                   slots={Object.keys(slotsMap)
@@ -179,7 +152,7 @@ export function CalendarView({ service }: { service: ServiceInfoViewModel }) {
 export default function Calendar({
   service,
 }: {
-  service: ServiceInfoViewModel;
+  service: { id: string, name: string, duration: string };
 }) {
   return (
     <Suspense

@@ -1,27 +1,16 @@
 "use client";
-import { Counter } from "../Counter/Counter";
 import { useEffect, useState } from "react";
-import { formatCurrency } from "../../utils/price-formtter";
-import { Price } from "../Price/Price";
-import { WIX_SERVICE_FEE } from "../../constants";
-import {
-  checkout as checkoutApi,
-  ticketDefinitions as api,
-  wixEvents,
-} from "@wix/events";
-import { useWixClient } from "../../hooks/useWixClient";
 import { Badge } from "flowbite-react";
-import { formatDateWithTime } from "../../utils/date-formatter";
-import { TicketDefinitionExtended } from "../../types/ticket";
+import { Counter } from "../Counter/Counter";
+import { Price } from "../Price/Price";
 
 export function TicketsTable({
   tickets,
   event,
 }: {
-  tickets: TicketDefinitionExtended[];
-  event: wixEvents.Event;
+  tickets: {_id: string, name: string, description: string, price: number, canPurchase: boolean, limitPerCheckout: number, options: {_id: string, price: number, name: string}[]}[];
+  event: { };
 }) {
-  const wixClient = useWixClient();
   const [selectedTickets, setSelectedTickets] = useState<
     Record<string, { quantity: number; price: number }>
   >({});
@@ -70,7 +59,7 @@ export function TicketsTable({
     if (!optionId) {
       return { ticket };
     }
-    const option = ticket!.pricing!.pricingOptions!.options!.find(
+    const option = ticket!.options.find(
       (o) => o._id === optionId
     );
     return { ticket, option };
@@ -81,16 +70,9 @@ export function TicketsTable({
       Object.keys(selectedTickets).reduce((acc, key) => {
         const { ticket, option } = findTicketAndMaybeOption(key);
         const tax =
-          (Number.parseFloat(option?.price?.value || ticket?.price?.value!) *
-            Number.parseFloat(
-              event.registration?.ticketing?.config?.taxConfig?.rate || "0"
-            )) /
-          100;
+          ((option?.price || ticket?.price!) * 17) / 100;
         const price = selectedTickets[key].price + tax;
-        const priceWithTax =
-          ticket!.wixFeeConfig!.type === api.FeeType.FEE_ADDED_AT_CHECKOUT
-            ? Number(price * WIX_SERVICE_FEE) / 100
-            : 0;
+        const priceWithTax = price + 20;
         return acc + selectedTickets[key].quantity * priceWithTax;
       }, 0)
     );
@@ -102,113 +84,14 @@ export function TicketsTable({
         0
       )
     );
-
-    if (
-      event.registration?.ticketing?.config?.taxConfig?.type ===
-      wixEvents.TaxType.ADDED_AT_CHECKOUT
-    ) {
-      setTax(
-        Object.keys(selectedTickets).reduce(
-          (acc, key) =>
-            acc +
-            (selectedTickets[key].quantity *
-              selectedTickets[key].price *
-              Number.parseFloat(
-                event.registration?.ticketing?.config?.taxConfig?.rate!
-              )) /
-            100,
-          0
-        )
-      );
-    }
   }, [selectedTickets]);
 
-  const createReservation = async () => {
-    const ticketsGrouped = Object.keys(selectedTickets).reduce(
-      (acc: Record<string, any>, key: string) => {
-        const [ticketId, optionId] = key.split("|");
-        if (!optionId) {
-          acc[ticketId] = selectedTickets[ticketId];
-        } else {
-          acc[ticketId] = {
-            ...acc[ticketId],
-            quantity:
-              (acc[ticketId]?.quantity ?? 0) + selectedTickets[key].quantity,
-            ticketDetails: [
-              ...(acc[ticketId]?.ticketDetails ?? []),
-              {
-                pricingOptionId: optionId,
-                capacity: selectedTickets[key].quantity,
-              },
-            ],
-          };
-        }
-        return acc;
-      },
-      {}
-    );
-
-    const ticketQuantities: checkoutApi.TicketReservationQuantity[] =
-      Object.keys(ticketsGrouped).map((key) => {
-        const [ticketId] = key.split("|");
-        const ticket = tickets.find((t) => t._id === ticketId);
-        return {
-          ticketDefinitionId: ticketId,
-          quantity: ticketsGrouped[ticketId].quantity,
-          ...(ticketsGrouped[ticketId].ticketDetails && {
-            ticketDetails: ticketsGrouped[ticketId].ticketDetails,
-          }),
-          ...(ticketsGrouped[ticketId].price &&
-            ticket!.pricing.pricingType === api.Type.DONATION && {
-              ticketDetails: [
-                {
-                  priceOverride: ticketsGrouped[ticketId].price.toString(),
-                },
-              ],
-            }),
-        };
-      });
-    try {
-      const { _id: id } = await wixClient.checkout.createReservation(
-        event._id!,
-        {
-          ticketQuantities,
-        }
-      );
-      try {
-        setRedirecting(true);
-        const { redirectSession } =
-          await wixClient.redirects.createRedirectSession({
-            eventsCheckout: { reservationId: id, eventSlug: event.slug! },
-            callbacks: {
-              postFlowUrl: window.location.origin,
-              thankYouPageUrl: `${window.location.origin}/events-success`,
-            },
-          });
-        if (id) {
-          window.location.href = redirectSession!.fullUrl!;
-        }
-      } catch (e) {
-        console.error(e);
-        setRedirecting(false);
-      }
-    } catch (e: any) {
-      if (
-        e.details.applicationError.data.details.details.error_key ===
-        "NO_PAYMENT_METHOD_CONFIGURED"
-      ) {
-        setError("No payment method configured");
-      } else {
-        setError("Something went wrong");
-      }
-      throw e;
-    }
-  };
+  const createReservation = async () => {};
 
   return (
     <div className="flex full-w flex-col max-w-[858px] mx-auto">
       <div className="flex full-w flex-col" id="tickets">
-        {tickets.map((ticket: TicketDefinitionExtended) => (
+        {tickets.map((ticket) => (
           <div
             className="flex flex-col sm:flex-row mt-6 border p-4 sm:p-6"
             key={ticket._id}
@@ -218,19 +101,10 @@ export function TicketsTable({
                 Ticket type
               </span>
               <span className="text-base">{ticket.name}</span>
-              {ticket.salePeriod &&
-                new Date(ticket.salePeriod.endDate!) > new Date() &&
-                new Date(ticket.salePeriod.startDate!) < new Date() && (
-                  <div className="mt-2 text-xs">
-                    <p>Sale ends</p>
-                    <p>
-                      {formatDateWithTime(
-                        new Date(ticket.salePeriod.endDate!),
-                        event.scheduling?.config?.timeZoneId!
-                      )}
-                    </p>
-                  </div>
-                )}
+              <div className="mt-2 text-xs">
+                <p>Sale ends</p>
+                <p>19:00 PM Monday</p>
+              </div>
               {expendTicketDescription[ticket._id!] && (
                 <p className="text-xs">{ticket.description}</p>
               )}
@@ -252,7 +126,7 @@ export function TicketsTable({
             </div>
             <div
               className={`basis-1/2 sm:pl-4 ${
-                ticket.pricing?.pricingOptions?.options?.length
+                ticket.options.length
                   ? ""
                   : "flex flex-col sm:flex-row"
               }`}
@@ -263,25 +137,10 @@ export function TicketsTable({
                   ticket={ticket}
                   setTickets={setTickets}
                   event={event}
-                  disabled={
-                    event.registration?.status !==
-                    wixEvents.RegistrationStatus.OPEN_TICKETS
-                  }
+                  disabled
                 />
-                {ticket.salePeriod &&
-                  new Date(ticket.salePeriod.startDate!) > new Date() && (
-                    <div className="mt-2 text-12">
-                      <p>Goes on sale</p>
-                      <span>
-                        {formatDateWithTime(
-                          new Date(ticket.salePeriod.startDate!),
-                          event.scheduling?.config?.timeZoneId!
-                        )}
-                      </span>
-                    </div>
-                  )}
               </div>
-              {!ticket.pricing?.pricingOptions?.options?.length && (
+              {!ticket.options.length && (
                 <div
                   className={`sm:ml-auto mt-4 sm:mt-0 ${
                     !ticket.canPurchase ? "w-fit" : ""
@@ -302,7 +161,7 @@ export function TicketsTable({
                         }
                         price={
                           selectedTickets[ticket._id!]?.price ||
-                          Number.parseFloat(ticket.price?.value!)
+                          ticket.price
                         }
                       />
                     </>
@@ -310,17 +169,13 @@ export function TicketsTable({
                   {ticket.limitPerCheckout! === 0 && (
                     <Badge color="gray">Sold Out</Badge>
                   )}
-                  {ticket.salePeriod &&
-                    new Date(ticket.salePeriod.endDate!) < new Date() && (
-                      <Badge color="gray">Sale ended</Badge>
-                    )}
                 </div>
               )}
-              {ticket.pricing?.pricingOptions?.options
-                ?.slice(
+              {ticket.options
+                .slice(
                   0,
                   expendPricingOptions[ticket._id!]
-                    ? ticket.pricing?.pricingOptions?.options?.length
+                    ? ticket.options.length
                     : 3
                 )
                 .map((option) => (
@@ -338,11 +193,7 @@ export function TicketsTable({
                           ticket={ticket}
                           setTickets={setTickets}
                           event={event}
-                          option={option}
-                          disabled={
-                            event.registration?.status !==
-                            wixEvents.RegistrationStatus.OPEN_TICKETS
-                          }
+                          disabled
                         />
                       </span>
                     </div>
@@ -370,7 +221,7 @@ export function TicketsTable({
                             price={
                               selectedTickets[`${ticket._id!}|${option._id}`]
                                 ?.price ||
-                              Number.parseFloat(option.price?.value!)
+                              option.price
                             }
                           />
                         </>
@@ -380,7 +231,7 @@ export function TicketsTable({
                     </div>
                   </div>
                 ))}
-              {ticket.pricing?.pricingOptions?.options?.length! > 3 && (
+              {ticket.options.length! > 3 && (
                 <div className="whitespace-nowrap mt-6">
                   <div className="flex justify-between">
                     <button
@@ -404,15 +255,15 @@ export function TicketsTable({
           <div className="flex" key="subtotal">
             <span>Subtotal</span>
             <span className="text-right ml-auto">
-              {formatCurrency(subTotals, tickets[0]!.price!.currency)}
+              100$
             </span>
           </div>
         ) : null}
         {tax ? (
           <div className="flex mt-2" key="tax">
-            <div>{event.registration?.ticketing?.config?.taxConfig?.name}</div>
+            <div>VAT</div>
             <div className="text-right ml-auto">
-              {formatCurrency(tax, tickets[0]!.price!.currency)}
+              17$
             </div>
           </div>
         ) : null}
@@ -420,27 +271,14 @@ export function TicketsTable({
           <div className="flex mt-2" key="fee">
             <span>Service fee</span>
             <span className="text-right ml-auto">
-              {formatCurrency(
-                serviceFee.toString(),
-                tickets[0]!.price!.currency
-              )}
+              10$
             </span>
           </div>
         ) : null}
         <div className="border-t flex mt-2 pt-2 text-lg" key="total">
           <span>Total</span>
           <span className="text-right ml-auto">
-            {formatCurrency(
-              tax +
-              serviceFee +
-              Object.keys(selectedTickets).reduce(
-                (acc, key) =>
-                  acc +
-                  selectedTickets[key].quantity * selectedTickets[key].price,
-                0
-              ),
-              event.registration?.ticketing?.currency!
-            )}
+            127$
           </span>
         </div>
         <div className="mt-6" key="checkout">

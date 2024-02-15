@@ -1,7 +1,6 @@
 import "./globals.css";
 import Footer from "./components/Layout/Footer";
 import Header from "./components/Layout/Header";
-import { ClientProvider } from "./components/Provider/ClientProvider";
 import { SidebarUI } from "./components/Sidebar/SidebarUI";
 import { LoginModal } from "./components/LoginModal/LoginModal";
 import { Metadata } from "next";
@@ -30,15 +29,13 @@ export default function RootLayout({
     <link rel="icon" href="https://www.wix.com/favicon.ico" />
     {process.env.NEXT_PUBLIC_WIX_CLIENT_ID ? (
       <>
-        <ClientProvider>
-          <NextTopLoader shadow={false} showSpinner={false} />
-          <Header />
-          <main className="bg-site min-h-[600px]">
-            <LayoutProvider>{children}</LayoutProvider>
-          </main>
-          <SidebarUI />
-          <LoginModal />
-        </ClientProvider>
+        <NextTopLoader shadow={false} showSpinner={false} />
+        <Header />
+        <main className="bg-site min-h-[600px]">
+          <LayoutProvider>{children}</LayoutProvider>
+        </main>
+        <SidebarUI />
+        <LoginModal />
         <div className="mt-3 sm:mt-9">
           <Footer />
         </div>

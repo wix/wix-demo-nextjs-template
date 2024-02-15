@@ -1,42 +1,30 @@
 import { ProductSidebar } from "@/app/components/Product/ProductSidebar/ProductSidebar";
-import { WixMediaImageGalleryClient } from "@/app/components/Image/WixMediaImageGallery/WixMediaImageGallery.client";
-import { queryProducts } from "@/app/model/store/store-api";
+import ImageGalleryClient from '@/app/components/Image/ImageGallery/ImageGallery.client';
+import { PLACEHOLDER_IMAGE } from '@/app/constants';
 
 export async function generateMetadata({ params }: any) {
-  if (params.slug) {
-    const product = (
-      await queryProducts({
-        slug: params.slug,
-        limit: 1,
-      })
-    )[0];
-
-    if (product && product.name) {
-      return {
-        title: product.name,
-      };
-    }
-  }
-
+  const product = { name: "Product name" };
   return {
-    title: "Unavailable Product",
+    title: product.name ?? "Unavailable Product",
   };
 }
 
-export default async function Page({ params }: any) {
+export default async function StoresCategoryPage({ params }: any) {
   if (!params.slug) {
     return;
   }
 
-  const product = (
-    await queryProducts({
-      slug: params.slug,
-      limit: 1,
-    })
-  )[0];
-  if (!product) {
-    return;
-  }
+  const product = {
+    _id: "1",
+    name: "Product name", sku: "sku",
+    description: "Product Description",
+    additionalInfoSections: [{
+    title: "Additional Info 1", description: "Additional Description 1"
+  }, {
+    title: "Additional Info 2", description: "Additional Description 2"
+  }],
+    productOptions: [{optionType: "color", name: "Color", choices: [{description: "blue", value: "blue"}, {description: "green", value: "green"}]}]
+  };
   return (
     <div className="mx-auto px-14 my-[80px]">
       {product ? (
@@ -44,7 +32,7 @@ export default async function Page({ params }: any) {
           <div className="flex flex-col sm:flex-row gap-2">
             <div className="box-border flex flex-col basis-1/2">
               <div>
-                <WixMediaImageGalleryClient items={product.media?.items!} />
+                <ImageGalleryClient items={[{src: PLACEHOLDER_IMAGE}, {src: PLACEHOLDER_IMAGE}, {src: PLACEHOLDER_IMAGE}]} />
                 <div
                   className="pb-4 mx-auto break-words w-full max-w-xl mt-6 font-roboto font-normal"
                   dangerouslySetInnerHTML={{
@@ -68,16 +56,5 @@ export default async function Page({ params }: any) {
 }
 
 export async function generateStaticParams(): Promise<{ slug?: string }[]> {
-  return queryProducts({
-    limit: 10,
-  })
-    .then((items) =>
-      items.map((product: any) => ({
-        slug: product.slug,
-      }))
-    )
-    .catch((err) => {
-      console.error(err);
-      return [];
-    });
+  return [{slug: 'product-1'}, {slug: 'product-2'}, {slug: 'product-3'}];
 }

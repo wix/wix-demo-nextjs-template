@@ -1,16 +1,13 @@
 import React, { Suspense } from "react";
-import Image from "next/image";
-import { collections, products } from "@wix/stores";
-import { PLACEHOLDER_IMAGE } from "@/app/constants";
-import { ProductCategories } from "@/app/components/ProductCategories/ProductCategories";
-import Link from "next/link";
-import ActionLink from "@/app/components/ActionLink/ActionLink";
 import { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import { ProductCategories } from "@/app/components/ProductCategories/ProductCategories";
 import {
   CardSkeleton,
   ListSkeleton,
 } from "@/app/components/Skeletons/Skeletons";
-import { queryCollections, queryProducts } from "@/app/model/store/store-api";
+import { PLACEHOLDER_IMAGE } from '@/app/constants';
 
 export const metadata: Metadata = {
   title: "Store",
@@ -21,7 +18,7 @@ const ProductCard = ({
   item,
   index,
 }: {
-  item: products.Product;
+  item: {_id: string, slug: string, name: string};
   index: number;
 }) => {
   return (
@@ -40,8 +37,8 @@ const ProductCard = ({
             objectPosition: "center",
           }}
           sizes="(max-width: 768px) 100vw, (max-width: 1535px) 33vw, 25vw"
-          src={item.media?.mainMedia?.image?.url || PLACEHOLDER_IMAGE}
-          alt={item.media?.mainMedia?.image?.altText || "main image"}
+          src={PLACEHOLDER_IMAGE}
+          alt="main image"
           className="w-full h-auto"
           priority={index < 4}
         />
@@ -54,47 +51,33 @@ const ProductCard = ({
           {item.name}
         </div>
         <div className="card-price w-auto text-[16px] flex justify-end items-center align-middle">
-          {item.price!.formatted!.price}
+          55$
         </div>
       </Link>
-      {!item.manageVariants && item.stock?.inStock ? (
-        <ActionLink
-          href={`/api/quick-buy/${item._id}?quantity=1`}
-          position="stretch"
-          className={"mt-8"}
-        >
-          Buy Now
-        </ActionLink>
-      ) : (
-        <button className="btn-main cursor-pointer text-lg" disabled>
-          Out of Stock
-        </button>
-      )}
+      <button className="btn-main cursor-pointer text-lg" disabled>
+        Out of Stock
+      </button>
     </div>
   );
 };
 
 export async function StoresCategory({ params }: any) {
-  let items: products.Product[] = [];
-  let collections: collections.Collection[] = [];
+  let items = [{
+    _id: "1", slug: "product-1", name: "Product 1"
+  }, {
+    _id: "2", slug: "product-2", name: "Product 2"
+  }, {
+    _id: "3", slug: "product-3", name: "Product 3"
+  }];
+  let collections = [{
+    _id: "1", name: "Collection 1", slug: "collection-1"
+  }, {
+    _id: "2", name: "Collection 2", slug: "collection-2"
+  }, {
+    _id: "3", name: "Collection 3", slug: "collection-3"
+  }];
   let collectionId;
-  try {
-    collections = await queryCollections();
-    collectionId = collections.find(({ slug }) => slug === params?.category)
-      ?._id!;
-    if (collectionId) {
-      items = await queryProducts({
-        limit: 10,
-        collectionId,
-      });
-    } else {
-      items = await queryProducts({
-        limit: 10,
-      });
-    }
-  } catch (err) {
-    console.error(err);
-  }
+
 
   return (
     <div className="overflow-hidden mx-auto flex md:flex-row flex-col gap-8 max-md:p-[20px]">

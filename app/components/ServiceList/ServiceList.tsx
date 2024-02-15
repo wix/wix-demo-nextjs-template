@@ -1,8 +1,9 @@
+import React from 'react';
 import Link from "next/link";
-import { WixMediaImage } from "@/app/components/Image/WixMediaImage";
-import { ServiceInfoViewModel } from "@/app/model/service/service.mapper";
-import { WORKSHOPS_ROUTE } from "@/app/routes";
+import Image from 'next/image';
 import ActionLink from "../ActionLink/ActionLink";
+import { WORKSHOPS_ROUTE } from "@/app/routes";
+import { PLACEHOLDER_IMAGE } from '@/app/constants';
 
 const ALL_SERVICES_CATEGORY_ID = "ALL";
 
@@ -11,7 +12,7 @@ export default function ServiceList({
   services,
 }: {
   categoryId?: string;
-  services: ServiceInfoViewModel[];
+  services: {id: string; slug: string; name: string; tagLine: string; duration: string; categoryId: string; categoryName: string;}[];
 }) {
   const categories = Object.values(
     services.reduce<{
@@ -102,9 +103,10 @@ const ServiceCard = ({
   service,
   index = -1,
 }: {
-  service: ServiceInfoViewModel;
+  service: {slug: string; name: string; tagLine: string; duration: string;};
   index?: number;
 }) => {
+  const formattedPrice = "13$";
 
   return (
     <div
@@ -115,8 +117,9 @@ const ServiceCard = ({
         href={`/service/${service.slug}`}
         className="block w-full h-[530px] lg:w-[530px]"
       >
-        <WixMediaImage
-          media={service.info.media.mainMedia?.image}
+        <Image
+          alt="service main"
+          src={PLACEHOLDER_IMAGE}
           width={1060}
           height={886}
           objectFit="cover"
@@ -130,15 +133,15 @@ const ServiceCard = ({
             href={`/service/${service.slug}`}
             className="card-title p-0 m-0"
           >
-            {service.info.name}
+            {service.name}
           </Link>
           <div className="card-subtitle grow">
             <p className="my-3 font-roboto font-normal">
-              {service.info.tagLine}
+              {service.tagLine}
             </p>
             <p className="w-full border-t border-custom-3 border-2 my-[24px]"></p>
             <p className="leading-8 font-roboto font-normal">
-              {service.info.formattedDuration}
+              {service.duration}
             </p>
           </div>
           <ActionLink

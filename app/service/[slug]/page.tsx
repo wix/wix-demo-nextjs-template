@@ -1,33 +1,19 @@
-import { getServiceBySlug } from "@/app/model/service/service-api";
-import ImageGallery from "@/app/components/Image/ImageGallery/ImageGallery";
-import { getWixClient } from '@/app/model/auth/auth';
-import { useServiceFormattedPrice } from "@/app/hooks/useServiceFormattedPrice";
-import { OfferedAsType } from "@/app/model/service/service-types.internal";
-import { ServiceInfoViewModel } from "@/app/model/service/service.mapper";
 import Link from "next/link";
+import ImageGallery from "@/app/components/Image/ImageGallery/ImageGallery";
+import { PLACEHOLDER_IMAGE } from '@/app/constants';
 
-const offeredAsToPaymentOptions = (offeredAs: string) =>
-  offeredAs === OfferedAsType.OFFLINE
-    ? "Offline"
-    : offeredAs === OfferedAsType.ONLINE
-      ? "Online"
-      : offeredAs === OfferedAsType.PRICING_PLAN
-        ? "Paid Plans"
-        : "Other";
-
-export default async function ServicePage({ params }: any) {
-  const wixClient = getWixClient();
-  const { data: service } = params.slug
-    ? await getServiceBySlug(wixClient, params.slug)
-    : { data: null };
+export default async function ServicePage() {
+  const service = {
+    id: "1", name: "Service Name", tagLine: "Service Tagline", duration: "1 hr", slug: "service-slug", description: "Service Description"
+  }
 
   return <ServicePageWithFallback service={service} />;
 }
 
 export function ServicePageWithFallback({
-                                          service,
-                                        }: {
-  service?: ServiceInfoViewModel | null;
+  service,
+}: {
+  service?: { id: string, name: string, tagLine: string, duration: string, slug: string, description: string } | null;
 }) {
   return (
     <div className="max-w-full-content mx-auto bg-white px-6 sm:px-28">
@@ -42,33 +28,28 @@ export function ServicePageWithFallback({
   );
 }
 
-function ServicePageView({ service }: { service: ServiceInfoViewModel }) {
-  const formattedPrice = useServiceFormattedPrice(
-    service!.payment!.paymentDetails
-  );
+function ServicePageView({ service }: { service: { id: string, name: string, tagLine: string, duration: string, slug: string, description: string } }) {
 
   return (
     <div className="full-w rounded overflow-hidden max-w-7xl mx-auto">
       <div className="mt-14 mb-8 pb-2 border-b border-black/20 w-full">
         <h1 className="font-bold text-[50px] leading-[56.81px] mb-2 font-serif">
-          {service.info.name}
+          {service.name}
         </h1>
         <p className="text-[18px] pt-4 empty:hidden font-roboto font-normal">
-          {service.info.tagLine}
+          {service.tagLine}
         </p>
         <div className="w-full h-full py-8 text-left">
           <div className="table text-base border-collapse">
             <div className="table-row">
               <p className="table-cell border border-black/20 p-4 empty:hidden">
-                {service.info.formattedDuration}
+                {service.duration}
               </p>
               <p className="table-cell border border-black/20 p-4 empty:hidden">
-                {formattedPrice.userFormattedPrice}
+                13$
               </p>
               <p className="table-cell border border-black/20 p-4 empty:hidden">
-                {service.payment.offeredAs
-                  .map(offeredAsToPaymentOptions)
-                  .join(", ")}
+                Offline
               </p>
             </div>
           </div>
@@ -82,21 +63,19 @@ function ServicePageView({ service }: { service: ServiceInfoViewModel }) {
           </div>
         </div>
       </div>
-      {service.info.description ? (
+      {service.description ? (
         <div className="border-b border-black/20 pb-8">
           <h2 className="font-serif font-bold text-[30px] leading-[34.09px]">
             Service Description
           </h2>
           <p className="text-sm w-full mt-4 font-roboto text-[18px] font-normal">
-            {service.info.description}
+            {service.description}
           </p>
         </div>
       ) : null}
-      {service.info.media?.otherMediaItems?.length ? (
-        <section className="mt-10">
-          <ImageGallery mediaItems={service.info.media.otherMediaItems} />
-        </section>
-      ) : null}
+      <section className="mt-10">
+        <ImageGallery urls={[PLACEHOLDER_IMAGE, PLACEHOLDER_IMAGE, PLACEHOLDER_IMAGE]} />
+      </section>
       <div className="w-full h-full pt-14 pb-10 text-center font-normal font-roboto">
         <Link href={`/calendar/${service.slug}`} className="btn-main">
           Book Now

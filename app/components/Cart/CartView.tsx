@@ -1,71 +1,32 @@
 "use client";
-import React, { useCallback, useState } from "react";
-import { usePrice } from "../../hooks/usePrice";
+import React, { useState } from "react";
 import { CartItem } from "../CartItem/CartItem";
-import { useCart } from "../../hooks/useCart";
 import { useUI } from "../Provider/context";
-import { useWixClient } from "../../hooks/useWixClient";
-import { Spinner } from "flowbite-react";
-import { cart, currentCart } from "@wix/ecom";
 import Link from "next/link";
 import { STORE_ROUTE } from "@/app/routes";
 
 export const CartView = ({ layout = "mini" }: { layout?: "full" | "mini" }) => {
-  const wixClient = useWixClient();
   const { closeSidebar, openModalNotPremium } = useUI();
-  const { data, isLoading } = useCart();
   const [redirecting, setRedirecting] = useState<boolean>(false);
-  const subTotal = usePrice(
-    data && {
-      amount: data!.lineItems!.reduce(
-        (
-          acc,
-          item
-        ) => {
-          return acc + Number.parseFloat(item.price?.amount!) * item.quantity!;
-        },
-        0
-      ),
-      currencyCode: data.currency!,
-    }
-  );
+  const subTotal = "16$";
+  const lineItems = [{
+    _id: "1", quantity: 1, url: "", productName: "item 1", description: "item 1 description"
+  }, {
+    _id: "2", quantity: 2, url: "", productName: "item 2", description: "item 2 description"
+  }, {
+    _id: "3", quantity: 3, url: "", productName: "item 3", description: "item 3 description"
+  }]
+
   const handleClose = () => closeSidebar();
-  const goToCheckout = useCallback(async () => {
+  const goToCheckout = () => {
     closeSidebar();
     setRedirecting(true);
-    try {
-      const checkout =
-        await wixClient.currentCart.createCheckoutFromCurrentCart(currentCart.ChannelType.WEB);
-      const { redirectSession } =
-        await wixClient.redirects.createRedirectSession({
-          ecomCheckout: { checkoutId: checkout!.checkoutId! },
-          callbacks: {
-            postFlowUrl: window.location.origin,
-            thankYouPageUrl: `${window.location.origin}/stores-success`,
-            cartPageUrl: `${window.location.origin}/cart`,
-          },
-        });
-      window.location.href = redirectSession!.fullUrl!;
-    } catch (e: any) {
-      if (
-        e.details.applicationError.code ===
-        "SITE_MUST_ACCEPT_PAYMENTS_TO_CREATE_CHECKOUT"
-      ) {
-        openModalNotPremium();
-      }
-      setRedirecting(false);
-    }
-  }, [cart]);
+  };
 
   const isMini = layout === "mini";
   return (
     <>
-      {isLoading ? (
-        <div className="flex-1 flex items-center justify-center">
-          <Spinner aria-label="Loading Cart" />
-        </div>
-      ) : null}
-      {!isLoading && data?.lineItems?.length! > 0 ? (
+      {lineItems?.length! > 0 ? (
         <div className={`${!isMini ? "max-w-6xl mx-auto" : ""}`}>
           <div className="flex-1">
             <div className="relative">
@@ -101,11 +62,10 @@ export const CartView = ({ layout = "mini" }: { layout?: "full" | "mini" }) => {
               </span>
             </div>
             <ul className="sm:px-6 p-4 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-accent-2 border-accent-2">
-              {data?.lineItems?.map((item: cart.LineItem) => (
+              {lineItems?.map((item: any) => (
                 <CartItem
                   key={item._id}
                   item={item}
-                  currencyCode={data?.currency!}
                 />
               ))}
             </ul>

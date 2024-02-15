@@ -1,5 +1,3 @@
-import { schedule } from "@wix/events";
-import { formatDuration, formatHours } from "../../utils/date-formatter";
 import Link from "next/link";
 
 export const Schedule = ({
@@ -7,12 +5,12 @@ export const Schedule = ({
   slug,
   isFull = false,
 }: {
-  items: schedule.ScheduleItem[];
+  items: {_id: string, start: string, end: string, name: string, stageName: string}[];
   slug: string;
   isFull?: boolean;
 }) => {
   const itemsWithDuration = items.map((item) => {
-    const { start, end } = item.timeSlot!;
+    const { start, end } = item!;
     const dateStart = new Date(start!);
     const dateEnd = new Date(end!);
     let msDifference = Number(dateEnd) - Number(dateStart);
@@ -28,19 +26,8 @@ export const Schedule = ({
           key={item._id}
         >
           <div className="basis-1/4">
-            <span className="block">{`${formatHours(
-              new Date(item.timeSlot?.start!),
-              item.timeSlot!.timeZoneId!
-            )} - ${formatHours(
-              new Date(item.timeSlot?.end!),
-              item.timeSlot!.timeZoneId!
-            )}`}</span>
-            <span className="text-gray-400 text-sm">
-              {formatDuration({
-                diffHrs: item.duration.diffHrs,
-                diffMins: item.duration.diffMins,
-              })}
-            </span>
+            <span className="block">21:00PM - 23:00PM</span>
+            <span className="text-gray-400 text-sm">2 Hr</span>
           </div>
           <div>
             <span className="block mb-2">{item.name}</span>

@@ -1,13 +1,12 @@
 import { Dropdown, Flowbite, useTheme } from "flowbite-react";
-import { products } from "@wix/stores";
 
 export function Option({
-                         onChange,
-                         option,
-                         selectedOption,
-                       }: {
+  onChange,
+  option,
+  selectedOption,
+}: {
   onChange: Function;
-  option: products.ProductOption;
+  option: {optionType: string,name: string, choices: {description: string, value: string}[]};
   selectedOption: string;
 }) {
   const onSelect = (optionSelected: string) => {

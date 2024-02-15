@@ -1,10 +1,9 @@
 import React, { Suspense } from "react";
 import { Metadata } from "next";
-import type { items as itemsTypes } from "@wix/data";
+import Image from 'next/image';
 import Link from "next/link";
 import { CardSkeleton } from "@/app/components/Skeletons/Skeletons";
-import { WixMediaImage } from "@/app/components/Image/WixMediaImage";
-import { queryBlogs } from "@/app/model/blogs/blogs-api";
+import { PLACEHOLDER_IMAGE } from '@/app/constants';
 import { BLOGS_ROUTE } from "@/app/routes";
 
 export const metadata: Metadata = {
@@ -12,7 +11,7 @@ export const metadata: Metadata = {
   description: "",
 };
 
-const BlogCard: React.FC<{ blog: itemsTypes.DataItem; index?: number }> = ({
+const BlogCard: React.FC<{ blog: any; index?: number }> = ({
   blog,
   index = -1,
 }) => {
@@ -22,8 +21,9 @@ const BlogCard: React.FC<{ blog: itemsTypes.DataItem; index?: number }> = ({
       className="flex flex-col max-md:border-b"
     >
       <div className="h-[400px] w-full">
-        <WixMediaImage
-          media={blog.data!.ingredients}
+        <Image
+          alt="blog post"
+          src={blog.data!.ingredients}
           width={600}
           height={800}
           objectFit="cover"
@@ -40,7 +40,26 @@ const BlogCard: React.FC<{ blog: itemsTypes.DataItem; index?: number }> = ({
 };
 
 async function Blogs() {
-  const items = await queryBlogs();
+  const items = [
+    {
+      _id: "1",
+      data: {
+        ingredients: PLACEHOLDER_IMAGE,
+        dishName: "item 1",
+        preparationInstructions: "Item content",
+        slug: "item-1",
+      },
+    },
+    {
+      _id: "2",
+      data: {
+        ingredients: PLACEHOLDER_IMAGE,
+        dishName: "item 2",
+        preparationInstructions: "Item content",
+        slug: "item-2",
+      },
+    },
+  ];;
 
   return (
     <div className="grid gap-x-5 gap-y-8 p-[20px] lg:grid-cols-3 max-w-[980px] mx-[auto]">

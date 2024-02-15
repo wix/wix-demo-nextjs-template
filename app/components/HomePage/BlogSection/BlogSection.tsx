@@ -1,15 +1,39 @@
 import Link from "next/link";
-import { queryBlogs } from "@/app/model/blogs/blogs-api";
 import React from "react";
-import { items as itemsTypes } from "@wix/data";
-import { WixMediaImage } from "@/app/components/Image/WixMediaImage";
 import { BLOGS_ROUTE } from "@/app/routes";
+import Image from 'next/image';
+import { PLACEHOLDER_IMAGE } from '@/app/constants';
 
 async function Blogs() {
-  const items = await queryBlogs({
-    limit: 3,
-    ascendingBy: "createdAt",
-  });
+  const items = [
+    {
+      _id: "1",
+      data: {
+        ingredients: PLACEHOLDER_IMAGE,
+        dishName: "item 1",
+        preparationInstructions: "Item 1 content",
+        slug: "item-1",
+      },
+    },
+    {
+      _id: "2",
+      data: {
+        ingredients: PLACEHOLDER_IMAGE,
+        dishName: "item 2",
+        preparationInstructions: "Item 2 content",
+        slug: "item-2",
+      },
+    },
+    {
+      _id: "3",
+      data: {
+        ingredients: PLACEHOLDER_IMAGE,
+        dishName: "item 3",
+        preparationInstructions: "Item 3 content",
+        slug: "item-3",
+      },
+    },
+  ];;
 
   return (
     <div className="max-md:mb-8 grid md:gap-x-[64px] gap-y-8 md:p-[120px] p-[32px] lg:grid-cols-4 md:grid-cols-2 grid-cols-1 mx-[auto]">
@@ -33,27 +57,28 @@ async function Blogs() {
       </div>
 
       {items!.map((post: any, index: any) => (
-        <BlogCard key={post._id} blog={post} index={index} />
+        <BlogCard key={post.id} blog={post} index={index} />
       ))}
     </div>
   );
 }
 
-const BlogCard: React.FC<{ blog: itemsTypes.DataItem; index?: number }> = ({
-                                                                             blog,
-                                                                             index = -1,
-                                                                           }) => {
+const BlogCard: React.FC<{ blog: any; index?: number }> = ({
+  blog,
+  index = -1,
+}) => {
   return (
     <Link
       href={`${BLOGS_ROUTE}/${blog.data!.slug}`}
       className="flex flex-col gap-[24px] border-0 max-md:border-b border-[#E0E0E0] max-md:pb-[42px]"
     >
       <div className="h-[429px] w-auto">
-        <WixMediaImage
-          media={blog.data!.ingredients}
+        <Image
+          alt="placeholder"
+          src={blog.data!.ingredients}
+          objectFit="cover"
           width={600}
           height={800}
-          objectFit="cover"
           sizes="(max-width: 768px) 100vw, 33vw"
           priority={index != -1 && index < 3}
         />

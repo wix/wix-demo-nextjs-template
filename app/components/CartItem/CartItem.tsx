@@ -1,39 +1,30 @@
 "use client";
 import { ChangeEvent, useEffect, useState } from "react";
 import Link from "next/link";
-import { usePrice } from "../../hooks/usePrice";
-import { cart } from "@wix/ecom";
+import Image from 'next/image';
 import { useUI } from "../Provider/context";
 import { Quantity } from "../Quantity/Quantity";
-import { useUpdateCart } from "../../hooks/useUpdateCart";
-import { useRemoveItemFromCart } from "../../hooks/useRemoveItemFromCart";
-import { WixMediaImage } from "../Image/WixMediaImage";
+import { PLACEHOLDER_IMAGE } from '@/app/constants';
 
 export const CartItem = ({
   item,
-  currencyCode,
   hideButtons,
   ...rest
 }: {
-  item: cart.LineItem;
-  currencyCode: string;
+  item: {_id: string, quantity: number, url: string, productName: string, description: string};
   hideButtons?: boolean;
 }) => {
   const { closeSidebarIfPresent } = useUI();
   const [removing, setRemoving] = useState(false);
   const [quantity, setQuantity] = useState<number>(item.quantity ?? 1);
-  const removeItem = useRemoveItemFromCart();
-  const updateCartMutation = useUpdateCart();
+  const removeItem = (_id: string) => {};
+  const updateCartMutation = ({ quantity, _id }: { quantity: number, _id: string }) => {};
 
-  const price = usePrice({
-    amount: Number.parseFloat(item.price?.amount!) * item.quantity!,
-    baseAmount: Number.parseFloat(item.price?.amount!) * item.quantity!,
-    currencyCode,
-  });
+  const price = "3$";
 
   const handleChange = async ({
-                                target: { value },
-                              }: ChangeEvent<HTMLInputElement>) => {
+    target: { value },
+  }: ChangeEvent<HTMLInputElement>) => {
     setQuantity(Number(value));
     await updateCartMutation({ quantity: Number(value), _id: item._id! });
   };
@@ -66,44 +57,35 @@ export const CartItem = ({
     <li className="flex flex-col py-4" {...rest}>
       <div className="flex flex-row gap-4 py-4">
         <div className="w-20 h-20 bg-violet relative overflow-hidden z-0">
-          {slug ? (
-            <Link href={`/product-page/${slug}`}>
-              <div onClick={() => closeSidebarIfPresent()}>
-                <WixMediaImage width={150} height={150} media={item.image!} />
-              </div>
-            </Link>
-          ) : (
-            <WixMediaImage width={150} height={150} media={item.image!} />
-          )}
+          <Image
+            alt="line item"
+            width={150} height={150}
+            src={PLACEHOLDER_IMAGE}
+          />
         </div>
         <div className="flex-1">
           <div className="flex-1 flex flex-col text-base">
             {slug ? (
               <Link href={`/product-page/${slug}`}>
                 <span className="cursor-pointer pb-1 text-gray-500">
-                  {item.productName?.translated}
+                  {item.productName}
                 </span>
               </Link>
             ) : (
               <span className="pb-1 text-gray-500">
-                {item.productName?.translated}
+                {item.productName}
               </span>
             )}
           </div>
           <span>{price}</span>
-          {item.descriptionLines?.length ? (
-            <div className="mt-1">
-              {item.descriptionLines?.map((line) => (
-                <span
-                  key={line.name?.translated}
-                  className="text-12 leading-tight text-gray-500 block"
-                >
-                  {line.name?.translated}:{" "}
-                  {line.colorInfo?.translated || line.plainText?.translated}
-                </span>
-              ))}
-            </div>
-          ) : null}
+          <div className="mt-1">
+            {item.description ?
+              <span
+                className="text-12 leading-tight text-gray-500 block"
+              >
+                {item.description}
+              </span>: null}
+          </div>
           {!hideButtons && (
             <div className="mt-3">
               <Quantity

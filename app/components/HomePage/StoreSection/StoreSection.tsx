@@ -1,14 +1,18 @@
 import React from "react";
-import { queryCollections } from "@/app/model/store/store-api";
-import { WixMediaImage } from "@/app/components/Image/WixMediaImage";
 import Link from "next/link";
+import Image from 'next/image';
 import { STORE_CATEGORY_ROUTE, STORE_ROUTE } from "@/app/routes";
+import { PLACEHOLDER_IMAGE } from '@/app/constants';
 
 async function Collections() {
-  const items = await queryCollections({
-    limit: 3,
-    exclude: "All Products",
-  });
+  const items = [{
+    name: 'item name 1', slug: 'item-1'
+  }, {
+    name: 'item name 2', slug: 'item-2'
+  }, {
+    name: 'item name 3', slug: 'item-3'
+  }];
+
   return (
     <div className="grid gap-x-[64px] gap-y-8 lg:grid-cols-3 ">
       {items.map((item: any, index: any) => (
@@ -25,12 +29,12 @@ const CollectionCard: React.FC<{
   return (
     <div className="flex flex-col gap-[24px]">
       <div className="h-[348px] w-full">
-        <WixMediaImage
-          disableZoom
-          media={item.media.mainMedia.image.url}
+        <Image
+          alt="placeholder"
+          src={PLACEHOLDER_IMAGE}
+          objectFit="cover"
           width={600}
           height={800}
-          objectFit="cover"
           sizes="(max-width: 768px) 100vw, 33vw"
           priority={index != -1 && index < 3}
         />

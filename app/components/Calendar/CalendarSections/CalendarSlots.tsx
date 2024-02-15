@@ -1,23 +1,23 @@
 "use client";
 import { PropsWithChildren } from "react";
 import { Tooltip } from "flowbite-react";
-import type { availabilityCalendar } from "@wix/bookings";
 
 export type SlotViewModel = {
   formattedTime: string;
-  slotAvailability: availabilityCalendar.SlotAvailability;
+  slotAvailability: {
+    bookable: boolean,
+    bookingPolicyViolations?: { tooLateToBook: boolean }
+  }
 };
 
 const SlotTooltip = ({
   bookable,
   bookingPolicyViolations,
   children,
-}: PropsWithChildren<
-  Pick<
-    availabilityCalendar.SlotAvailability,
-    "bookable" | "bookingPolicyViolations"
-  >
->) =>
+}: PropsWithChildren<{
+  bookable: boolean,
+  bookingPolicyViolations?: { tooLateToBook: boolean }
+}>) =>
   bookable ? (
     <div className="w-full">{children}</div>
   ) : (
@@ -26,8 +26,8 @@ const SlotTooltip = ({
         bookingPolicyViolations?.tooLateToBook
           ? "This slot cannot be booked anymore"
           : bookingPolicyViolations?.tooLateToBook
-            ? "It is too early to book this slot"
-            : "This slot cannot be booked"
+          ? "It is too early to book this slot"
+          : "This slot cannot be booked"
       }
     >
       {children}
@@ -35,10 +35,10 @@ const SlotTooltip = ({
   );
 
 const CalendarSlots = ({
-                         slots,
-                         onTimeSelected,
-                         selectedTime,
-                       }: {
+  slots,
+  onTimeSelected,
+  selectedTime,
+}: {
   slots: SlotViewModel[];
   selectedTime: string;
   onTimeSelected: (selectedTime: string) => void;

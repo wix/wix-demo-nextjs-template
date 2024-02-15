@@ -1,19 +1,18 @@
 "use client";
 import Swatch from "../Swatch/Swatch";
 import { Option } from "../Option/Option";
-import { products } from "@wix/stores";
 
 interface ProductOptionsProps {
-  options: products.ProductOption[];
+  options: {optionType: string,name: string, choices: {description: string, value: string}[]}[];
   selectedOptions: any;
   setSelectedOptions: React.Dispatch<React.SetStateAction<any>>;
 }
 
 export const ProductOptions: React.FC<ProductOptionsProps> = ({
-                                                                options,
-                                                                selectedOptions,
-                                                                setSelectedOptions,
-                                                              }) => {
+  options,
+  selectedOptions,
+  setSelectedOptions,
+}) => {
   const setSelected = (newOption: Record<string, string>) => {
     setSelectedOptions((selectedOptions: any) => {
       return {

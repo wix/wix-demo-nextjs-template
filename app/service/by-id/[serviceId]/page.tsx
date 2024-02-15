@@ -1,12 +1,7 @@
-import { getWixClient } from '@/app/model/auth/auth';
-import { getServiceById } from "@/app/model/service/service-api";
 import { ServicePageWithFallback } from "@/app/service/[slug]/page";
 
 export default async function ServicePage({ params }: any) {
-  const wixClient = getWixClient();
-  const { data: service } = params.serviceId
-    ? await getServiceById(wixClient, params.serviceId)
-    : { data: null };
+  const service = {id: "1", name: "Service Name", tagLine: "Service Tagline", duration: "1 hr", slug: "service-slug", description: "Service Description"}
 
   return <ServicePageWithFallback service={service} />;
 }

@@ -15,7 +15,7 @@ Prerequisites:
 
 Set up environment variables to consume Wix Headless APIs:
 
-1. In the template's root folder, create a file for the local environment variables:
+1. In the root folder, create a file for the local environment variables:
    ```sh
    cp .env.template .env.local.
    ```
@@ -26,6 +26,7 @@ Run the development server:
 1. Run either:
 
    ```sh
+   yarn
    yarn dev
    ```
 

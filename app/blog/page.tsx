@@ -4,7 +4,18 @@ import Image from 'next/image';
 import Link from "next/link";
 import { CardSkeleton } from "@/app/components/Skeletons/Skeletons";
 import { PLACEHOLDER_IMAGE } from '@/app/constants';
+import { createClient, OAuthStrategy } from '@wix/sdk';
+import { items as itemsSDK } from '@wix/data';
 import { BLOGS_ROUTE } from "@/app/routes";
+
+const wixClient = createClient({
+  modules: {
+    itemsSDK,
+  },
+  auth: OAuthStrategy({
+    clientId: process.env.NEXT_PUBLIC_WIX_CLIENT_ID!,
+  }),
+});
 
 export const metadata: Metadata = {
   title: "Blog",

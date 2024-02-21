@@ -350,10 +350,29 @@
   resolved "https://registry.npmjs.org/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
+"@wix/data@^1.0.71":
+  version "1.0.79"
+  resolved "https://registry.npmjs.org/@wix/data/-/data-1.0.79.tgz#69ffd82ee91d87ea33c728b32c09b8ca26b1aa19"
+  integrity sha512-vedpaiqOsTqEEiJSKF60tqu5avnx1JSgkiyTthgwQS3Q+lrjPJty4thgmntboia3CdtegdQgulPxVaFHWpbxxw==
+  dependencies:
+    "@wix/metro-runtime" "^1.1528.0"
+    "@wix/motion-edm-autogen-query-wrapper" "^1.0.37"
+    "@wix/sdk-runtime" "^0.2.7"
+    "@wix/sdk-types" "^1.5.3"
+
 "@wix/filter-builder@^1.0.20":
   version "1.0.38"
   resolved "https://registry.npmjs.org/@wix/filter-builder/-/filter-builder-1.0.38.tgz#d275b958fc873d12768692e6b6472a4d08684334"
   integrity sha512-KRpS+k9KZOxBxwnp7viGMW/0Ww+DXDejPnN+VbvhaA4zhOnM+NCqx5p3OdBEw1OWJupZ6le1W2yNMGCtLtmPeQ==
+  dependencies:
+    "@babel/runtime" "^7.22.15"
+    kind-of "~5.1.0"
+    tslib "^2.6.2"
+
+"@wix/filter-builder@^1.0.39":
+  version "1.0.41"
+  resolved "https://registry.npmjs.org/@wix/filter-builder/-/filter-builder-1.0.41.tgz#a74d9e5543d0b9cd81bb94ff787f9f4dcc15575d"
+  integrity sha512-+UyKk3emi85OWvaTAkMLGx/Kp68QjRKzzCFDYCqjEL8q+HDGRxovoKol38TWzr24RGg2j/vBcKvWVePU/BnCXQ==
   dependencies:
     "@babel/runtime" "^7.22.15"
     kind-of "~5.1.0"
@@ -376,6 +395,13 @@
     "@babel/runtime" "^7.0.0"
     tslib "^2.0.0"
 
+"@wix/metro-public-utils@1.0.24":
+  version "1.0.24"
+  resolved "https://registry.npmjs.org/@wix/metro-public-utils/-/metro-public-utils-1.0.24.tgz#66b8436acd25ebe0f07ceec07fb7243248bed131"
+  integrity sha512-k3Wu8JW/VZHo4MNPL+Wny00CNKdjcodEzvIE1fa3ShyO8V1yCe53G7LrQSfQwiYfzaP6hPpbhqUQl3vIZk3UqQ==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+
 "@wix/metro-public-utils@1.0.8":
   version "1.0.8"
   resolved "https://registry.npmjs.org/@wix/metro-public-utils/-/metro-public-utils-1.0.8.tgz#df00d5a2a4bb1486cf1cb97c1694580f70b670c7"
@@ -395,6 +421,19 @@
     lodash "^4.17.21"
     long "^4.0.0"
 
+"@wix/metro-runtime@^1.1528.0":
+  version "1.1633.0"
+  resolved "https://registry.npmjs.org/@wix/metro-runtime/-/metro-runtime-1.1633.0.tgz#ca7279097b9efba84d271e7a2d23819d2a7c5228"
+  integrity sha512-PyloH2udAd9jmwXjj8ya8Qpd0FRHHG7OYGElN0BFVrsNQntp6wXqux+sKtT/zk2S6sVqD/GwVNa5WQiHQoyzGw==
+  dependencies:
+    "@wix/metro-public-utils" "1.0.24"
+    "@wix/motion-edm-autogen-p13n" "1.0.53"
+    "@wix/motion-edm-autogen-transformations" "1.46.0"
+    "@wix/motion-edm-autogen-transformations-core" "1.43.0"
+    lodash "^4.17.21"
+    long "^4.0.0"
+    querystring "^0.2.1"
+
 "@wix/motion-edm-autogen-common@1.23.0":
   version "1.23.0"
   resolved "https://registry.npmjs.org/@wix/motion-edm-autogen-common/-/motion-edm-autogen-common-1.23.0.tgz#9bf622bb2e53f8a96d8f93c0c203d26e0ede3819"
@@ -405,6 +444,16 @@
     lodash "~4.17.0"
     tslib "^2.0.0"
 
+"@wix/motion-edm-autogen-common@1.39.0":
+  version "1.39.0"
+  resolved "https://registry.npmjs.org/@wix/motion-edm-autogen-common/-/motion-edm-autogen-common-1.39.0.tgz#776b3465ac7d3e0b14d8e7ec2ffcad261adda733"
+  integrity sha512-y2zsE1rN6EtBv/6xgogio0O9EtYlsp8CcpUydEXsHq/1prsts8t5XuhvIm14+0G5BpVw4mX4nZTEpm1FznZquA==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    "@wix/motion-edm-autogen-types" "1.0.27"
+    lodash "~4.17.0"
+    tslib "^2.0.0"
+
 "@wix/motion-edm-autogen-p13n@1.0.26":
   version "1.0.26"
   resolved "https://registry.npmjs.org/@wix/motion-edm-autogen-p13n/-/motion-edm-autogen-p13n-1.0.26.tgz#f10459dfd7b91ef5006e741dfead632fd6298599"
@@ -412,6 +461,15 @@
   dependencies:
     "@babel/runtime" "^7.0.0"
     "@wix/motion-edm-autogen-types" "1.0.11"
+    lodash "~4.17.0"
+
+"@wix/motion-edm-autogen-p13n@1.0.53":
+  version "1.0.53"
+  resolved "https://registry.npmjs.org/@wix/motion-edm-autogen-p13n/-/motion-edm-autogen-p13n-1.0.53.tgz#926e5d51cdebfa6e4457a0f558561ece2800a291"
+  integrity sha512-wTAv70pmaQpc1uC0OUWYpN6RJnEjohJqbX0Rez3hgXrcwJ9g8ktjADMkIpaZCdiv4jqMwFXzduGfs0rX/wJvog==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    "@wix/motion-edm-autogen-types" "1.0.27"
     lodash "~4.17.0"
 
 "@wix/motion-edm-autogen-query-wrapper@^1.0.0":
@@ -427,6 +485,19 @@
     long "~4.0.0"
     tslib "^2.0.0"
 
+"@wix/motion-edm-autogen-query-wrapper@^1.0.37":
+  version "1.0.67"
+  resolved "https://registry.npmjs.org/@wix/motion-edm-autogen-query-wrapper/-/motion-edm-autogen-query-wrapper-1.0.67.tgz#0c4e5704ef33ce7a21b8c6dc849f27d9e2fa3d19"
+  integrity sha512-wHslNdwsyIbGP+UekwtfZHox5XAdKhjGnRV9wRxBikultvow+hPgD+aPWvxMOz1abEDYZinwmfP+ae4IAitnQw==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    "@wix/filter-builder" "^1.0.39"
+    "@wix/motion-edm-autogen-common" "1.39.0"
+    "@wix/motion-edm-autogen-transformations-core" "1.43.0"
+    lodash "~4.17.0"
+    long "~4.0.0"
+    tslib "^2.0.0"
+
 "@wix/motion-edm-autogen-transformations-core@1.26.0":
   version "1.26.0"
   resolved "https://registry.npmjs.org/@wix/motion-edm-autogen-transformations-core/-/motion-edm-autogen-transformations-core-1.26.0.tgz#470fc4a6634e18ce7435e2aa93945d525fea713a"
@@ -435,6 +506,20 @@
     "@babel/runtime" "^7.0.0"
     "@rushstack/eslint-patch" "^1.1.0"
     "@wix/motion-edm-autogen-common" "1.23.0"
+    constant-case "~3.0.0"
+    deep-for-each "~3.0.0"
+    jsonpath-plus "~5.1.0"
+    lodash "~4.17.0"
+    tslib "^2.0.0"
+
+"@wix/motion-edm-autogen-transformations-core@1.43.0":
+  version "1.43.0"
+  resolved "https://registry.npmjs.org/@wix/motion-edm-autogen-transformations-core/-/motion-edm-autogen-transformations-core-1.43.0.tgz#913958587ddf895b2b8079677c440919e72506a1"
+  integrity sha512-frcVxgZKV0AdolyVwgHGeIXTElfagouxKCPAXZHTsUYs0bEBpHuYHkafEXmQzyL+QPJyCYn/0ATdMl6R/LOZbg==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    "@rushstack/eslint-patch" "^1.1.0"
+    "@wix/motion-edm-autogen-common" "1.39.0"
     constant-case "~3.0.0"
     deep-for-each "~3.0.0"
     jsonpath-plus "~5.1.0"
@@ -458,10 +543,32 @@
     lodash "~4.17.0"
     tslib "^2.0.0"
 
+"@wix/motion-edm-autogen-transformations@1.46.0":
+  version "1.46.0"
+  resolved "https://registry.npmjs.org/@wix/motion-edm-autogen-transformations/-/motion-edm-autogen-transformations-1.46.0.tgz#a1322c06e9b54c15866c7156d460ae0acb8ef423"
+  integrity sha512-O6ue2TBalw09zQXwWLIDs2jNTq56MqTVsrPTwMdT5aICDUkbxxKlykDjwU2xgK59HEV5LOO6Y+VBFRb+7CEMGw==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    "@rushstack/eslint-patch" "^1.1.0"
+    "@wix/motion-edm-autogen-common" "1.39.0"
+    "@wix/motion-edm-autogen-transformations-core" "1.43.0"
+    constant-case "~3.0.0"
+    deep-for-each "~3.0.0"
+    http-status-codes "^2.0.0"
+    js-yaml "~4.1.0"
+    jsonpath-plus "~5.1.0"
+    lodash "~4.17.0"
+    tslib "^2.0.0"
+
 "@wix/motion-edm-autogen-types@1.0.11":
   version "1.0.11"
   resolved "https://registry.npmjs.org/@wix/motion-edm-autogen-types/-/motion-edm-autogen-types-1.0.11.tgz#0103a6dbda9001be44537a320dca0cc363ff2407"
   integrity sha512-NBsTA+w79B947dtz0r+5m8TX99gkhfK+Q3ZyBHBF3RLghf+RwcKKMowqw+FX2MpaVT6lvKyiutN81/hlL6U3ew==
+
+"@wix/motion-edm-autogen-types@1.0.27":
+  version "1.0.27"
+  resolved "https://registry.npmjs.org/@wix/motion-edm-autogen-types/-/motion-edm-autogen-types-1.0.27.tgz#2c505affbbc5523ebd32d62d3d8f4039c9fbfbdd"
+  integrity sha512-wUm0qMBoccV33fVeV1gDw+0fg8v0/b6mpcHD+o1If8I+IyG2xpPKLBe2JkHYCgSgTJQoXcR5uEEMQfg1kzHV+A==
 
 "@wix/redirects@^1.0.28":
   version "1.0.28"
@@ -472,10 +579,22 @@
     "@wix/motion-edm-autogen-query-wrapper" "^1.0.0"
     "@wix/sdk-types" "^1.0.0"
 
+"@wix/sdk-runtime@^0.2.7":
+  version "0.2.8"
+  resolved "https://registry.npmjs.org/@wix/sdk-runtime/-/sdk-runtime-0.2.8.tgz#05b05f151b7a261d76fbea4c6f1b7f621dffd513"
+  integrity sha512-ybmvrNUJTp7y+edX6B3g5tY09vUrX80b36XafD08EzDamruxI7CcAnuDy6LZBGQCY+Ch8qqg9e6ncYPPbOSfsg==
+  dependencies:
+    "@wix/sdk-types" "^1.5.8"
+
 "@wix/sdk-types@1.5.1", "@wix/sdk-types@^1.0.0":
   version "1.5.1"
   resolved "https://registry.npmjs.org/@wix/sdk-types/-/sdk-types-1.5.1.tgz#7549493fde6783095117d61e9f09945ef3916903"
   integrity sha512-Q4nxSMa2xtutD7EYFtl09g7lJYxSoX93wJ0q6VKt4M/wbCibPxtyybFuJSFBAdVF8pSac/ufmtaBSmzzasuLzg==
+
+"@wix/sdk-types@^1.5.3", "@wix/sdk-types@^1.5.8":
+  version "1.5.8"
+  resolved "https://registry.npmjs.org/@wix/sdk-types/-/sdk-types-1.5.8.tgz#3d57799981e6cd8e1df30026604a1c5e1b9f75b5"
+  integrity sha512-XS7GeJWUCHUxN+bE1Vf4z2RMVTJ1EJcJhgzoaZVM+ld60e93x9i2+lKfA88kH3Rqo0eAR/MbajRbfes2J72VLQ==
 
 "@wix/sdk@^1.5.7":
   version "1.5.7"

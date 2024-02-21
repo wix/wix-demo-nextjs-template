@@ -2,38 +2,25 @@ import Link from "next/link";
 import React from "react";
 import { BLOGS_ROUTE } from "@/app/routes";
 import Image from 'next/image';
-import { PLACEHOLDER_IMAGE } from '@/app/constants';
+import { createClient, media, OAuthStrategy } from '@wix/sdk';
+import { items as itemsSDK } from '@wix/data';
+
+const wixClient = createClient({
+  modules: {
+    itemsSDK,
+  },
+  auth: OAuthStrategy({
+    clientId: process.env.NEXT_PUBLIC_WIX_CLIENT_ID!,
+  }),
+});
 
 async function Blogs() {
-  const items = [
-    {
-      _id: "1",
-      data: {
-        ingredients: PLACEHOLDER_IMAGE,
-        dishName: "item 1",
-        preparationInstructions: "Item 1 content",
-        slug: "item-1",
-      },
-    },
-    {
-      _id: "2",
-      data: {
-        ingredients: PLACEHOLDER_IMAGE,
-        dishName: "item 2",
-        preparationInstructions: "Item 2 content",
-        slug: "item-2",
-      },
-    },
-    {
-      _id: "3",
-      data: {
-        ingredients: PLACEHOLDER_IMAGE,
-        dishName: "item 3",
-        preparationInstructions: "Item 3 content",
-        slug: "item-3",
-      },
-    },
-  ];;
+  const { items } = await wixClient.itemsSDK.queryDataItems({
+    dataCollectionId: "FarmToTableRecipes"
+  }).limit(3)
+    .ascending("createdAt")
+    .find();
+
 
   return (
     <div className="max-md:mb-8 grid md:gap-x-[64px] gap-y-8 md:p-[120px] p-[32px] lg:grid-cols-4 md:grid-cols-2 grid-cols-1 mx-[auto]">
@@ -75,7 +62,7 @@ const BlogCard: React.FC<{ blog: any; index?: number }> = ({
       <div className="h-[429px] w-auto">
         <Image
           alt="placeholder"
-          src={blog.data!.ingredients}
+          src={media.getScaledToFillImageUrl(blog.data!.ingredients, 340, 430, {})}
           objectFit="cover"
           width={600}
           height={800}

@@ -525,15 +525,6 @@
     native-promise-only "0.8.1"
     weakmap-polyfill "2.0.0"
 
-"@wix/data@^1.0.71":
-  version "1.0.71"
-  resolved "https://registry.npmjs.org/@wix/data/-/data-1.0.71.tgz#52c53b9f7fcad3dbd6100f89ec6c50a831d149e9"
-  integrity sha512-z3HcHZZIuCG/6ycuFOwDAWNMKzGRzGziHyNeej34JnkvKbqSwZmLLXBaICz0LKZqpMtl/KP8FU0s13PffRVsmg==
-  dependencies:
-    "@wix/metro-runtime" "^1.1528.0"
-    "@wix/motion-edm-autogen-query-wrapper" "^1.0.37"
-    "@wix/sdk-types" "^1.3.0"
-
 "@wix/draft-js@0.0.11":
   version "0.0.11"
   resolved "https://registry.npmjs.org/@wix/draft-js/-/draft-js-0.0.11.tgz#e7327883e7e814448a6397a524aa539cf221a70e"
@@ -548,15 +539,6 @@
   version "1.0.38"
   resolved "https://registry.npmjs.org/@wix/filter-builder/-/filter-builder-1.0.38.tgz#d275b958fc873d12768692e6b6472a4d08684334"
   integrity sha512-KRpS+k9KZOxBxwnp7viGMW/0Ww+DXDejPnN+VbvhaA4zhOnM+NCqx5p3OdBEw1OWJupZ6le1W2yNMGCtLtmPeQ==
-  dependencies:
-    "@babel/runtime" "^7.22.15"
-    kind-of "~5.1.0"
-    tslib "^2.6.2"
-
-"@wix/filter-builder@^1.0.39":
-  version "1.0.39"
-  resolved "https://registry.npmjs.org/@wix/filter-builder/-/filter-builder-1.0.39.tgz#27450aa864db4afe04b2e5964012073af9610338"
-  integrity sha512-EmASSuAnk6jXPrghN7p5D5K32dGVBzehxx1udpT54zPA9f/MbjSt3kxMBQh1k2yvGEJ3pN6a0bxLJb4JYt3cyw==
   dependencies:
     "@babel/runtime" "^7.22.15"
     kind-of "~5.1.0"
@@ -597,13 +579,6 @@
     fastdom "^1.0.10"
     tslib "^2.0.0"
 
-"@wix/metro-public-utils@1.0.14":
-  version "1.0.14"
-  resolved "https://registry.npmjs.org/@wix/metro-public-utils/-/metro-public-utils-1.0.14.tgz#5a838a09d7de34b6144709381876ab949110deb0"
-  integrity sha512-Bp6oUmsF19Fk3Z+/YVgX/p654U4mh3oTBR20GY+lTOQzxMFw8j53ovh9aje3e/M58shvJdjZ5Do828nxy5yBnw==
-  dependencies:
-    "@babel/runtime" "^7.0.0"
-
 "@wix/metro-public-utils@1.0.8":
   version "1.0.8"
   resolved "https://registry.npmjs.org/@wix/metro-public-utils/-/metro-public-utils-1.0.8.tgz#df00d5a2a4bb1486cf1cb97c1694580f70b670c7"
@@ -623,19 +598,6 @@
     lodash "^4.17.21"
     long "^4.0.0"
 
-"@wix/metro-runtime@^1.1528.0":
-  version "1.1613.0"
-  resolved "https://registry.npmjs.org/@wix/metro-runtime/-/metro-runtime-1.1613.0.tgz#bfa64fd1855126ec15ea2f24774cc7067e854117"
-  integrity sha512-KLkfd3nSVmWHCmughwwQe9k4bxKx/dNaR1J1wd4nf/N6+nFXm5Vy4ZPE9pWP74EuYKa3Mkr1nY6ul9xRxEyDfA==
-  dependencies:
-    "@wix/metro-public-utils" "1.0.14"
-    "@wix/motion-edm-autogen-p13n" "1.0.40"
-    "@wix/motion-edm-autogen-transformations" "1.36.0"
-    "@wix/motion-edm-autogen-transformations-core" "1.33.0"
-    lodash "^4.17.21"
-    long "^4.0.0"
-    querystring "^0.2.1"
-
 "@wix/motion-edm-autogen-common@1.23.0":
   version "1.23.0"
   resolved "https://registry.npmjs.org/@wix/motion-edm-autogen-common/-/motion-edm-autogen-common-1.23.0.tgz#9bf622bb2e53f8a96d8f93c0c203d26e0ede3819"
@@ -646,16 +608,6 @@
     lodash "~4.17.0"
     tslib "^2.0.0"
 
-"@wix/motion-edm-autogen-common@1.29.0":
-  version "1.29.0"
-  resolved "https://registry.npmjs.org/@wix/motion-edm-autogen-common/-/motion-edm-autogen-common-1.29.0.tgz#b3abf4dfa1940c666c030e31973485a4743195c9"
-  integrity sha512-cEFgeXH2aYl1xwaslOj1LPfqV9HSO7C2MhMba02cu2LE12VdvVr+4vOSasBbg9vfUU+vtxCRlVSDuPjUGKpcSQ==
-  dependencies:
-    "@babel/runtime" "^7.0.0"
-    "@wix/motion-edm-autogen-types" "1.0.17"
-    lodash "~4.17.0"
-    tslib "^2.0.0"
-
 "@wix/motion-edm-autogen-p13n@1.0.26":
   version "1.0.26"
   resolved "https://registry.npmjs.org/@wix/motion-edm-autogen-p13n/-/motion-edm-autogen-p13n-1.0.26.tgz#f10459dfd7b91ef5006e741dfead632fd6298599"
@@ -663,15 +615,6 @@
   dependencies:
     "@babel/runtime" "^7.0.0"
     "@wix/motion-edm-autogen-types" "1.0.11"
-    lodash "~4.17.0"
-
-"@wix/motion-edm-autogen-p13n@1.0.40":
-  version "1.0.40"
-  resolved "https://registry.npmjs.org/@wix/motion-edm-autogen-p13n/-/motion-edm-autogen-p13n-1.0.40.tgz#6ef0fd61abc9704b85c50f0504d8d9e12d2e907b"
-  integrity sha512-95mTk5o+fxWkwYceLzxqt6K9/Mu3QgOIpRAakDc5Z1xgzy7OlvuezMhDJySkDxfew5rpF8BWYormVpxDbet6YQ==
-  dependencies:
-    "@babel/runtime" "^7.0.0"
-    "@wix/motion-edm-autogen-types" "1.0.17"
     lodash "~4.17.0"
 
 "@wix/motion-edm-autogen-query-wrapper@^1.0.0":
@@ -687,19 +630,6 @@
     long "~4.0.0"
     tslib "^2.0.0"
 
-"@wix/motion-edm-autogen-query-wrapper@^1.0.37":
-  version "1.0.54"
-  resolved "https://registry.npmjs.org/@wix/motion-edm-autogen-query-wrapper/-/motion-edm-autogen-query-wrapper-1.0.54.tgz#f9228c68ad669f2b248ca57088a24acf487719ae"
-  integrity sha512-D3txiLji7LGhmqcU6jWDAoX25zYRV8AqygkINWWVnGgQIbenMAlkO2JTonb2uKaKNrsvDG6mgTylsjIZjUbsWw==
-  dependencies:
-    "@babel/runtime" "^7.0.0"
-    "@wix/filter-builder" "^1.0.39"
-    "@wix/motion-edm-autogen-common" "1.29.0"
-    "@wix/motion-edm-autogen-transformations-core" "1.33.0"
-    lodash "~4.17.0"
-    long "~4.0.0"
-    tslib "^2.0.0"
-
 "@wix/motion-edm-autogen-transformations-core@1.26.0":
   version "1.26.0"
   resolved "https://registry.npmjs.org/@wix/motion-edm-autogen-transformations-core/-/motion-edm-autogen-transformations-core-1.26.0.tgz#470fc4a6634e18ce7435e2aa93945d525fea713a"
@@ -708,20 +638,6 @@
     "@babel/runtime" "^7.0.0"
     "@rushstack/eslint-patch" "^1.1.0"
     "@wix/motion-edm-autogen-common" "1.23.0"
-    constant-case "~3.0.0"
-    deep-for-each "~3.0.0"
-    jsonpath-plus "~5.1.0"
-    lodash "~4.17.0"
-    tslib "^2.0.0"
-
-"@wix/motion-edm-autogen-transformations-core@1.33.0":
-  version "1.33.0"
-  resolved "https://registry.npmjs.org/@wix/motion-edm-autogen-transformations-core/-/motion-edm-autogen-transformations-core-1.33.0.tgz#86f997bf6f5033074c13f5dbd91ea085c1d83258"
-  integrity sha512-fj4l+t+Iq+ZLsBeSQ/l2rcwXwew4N/Ubgp4YjPn1MVyrSLq2tHyIBU6ersKYO0Nt5K3JgzCbiiaUSNrIpS33MA==
-  dependencies:
-    "@babel/runtime" "^7.0.0"
-    "@rushstack/eslint-patch" "^1.1.0"
-    "@wix/motion-edm-autogen-common" "1.29.0"
     constant-case "~3.0.0"
     deep-for-each "~3.0.0"
     jsonpath-plus "~5.1.0"
@@ -745,32 +661,10 @@
     lodash "~4.17.0"
     tslib "^2.0.0"
 
-"@wix/motion-edm-autogen-transformations@1.36.0":
-  version "1.36.0"
-  resolved "https://registry.npmjs.org/@wix/motion-edm-autogen-transformations/-/motion-edm-autogen-transformations-1.36.0.tgz#fb5cafc7cffce923ec8c7902dd7afa610692cc5c"
-  integrity sha512-CLyTLZOKYiHPvzqKj7n64VSjxDE9MQSkdn2mTtY87oqniwVeBi8KPOJPjTgx+Tm3YHBLSvUxnQR0imn51CnMyQ==
-  dependencies:
-    "@babel/runtime" "^7.0.0"
-    "@rushstack/eslint-patch" "^1.1.0"
-    "@wix/motion-edm-autogen-common" "1.29.0"
-    "@wix/motion-edm-autogen-transformations-core" "1.33.0"
-    constant-case "~3.0.0"
-    deep-for-each "~3.0.0"
-    http-status-codes "^2.0.0"
-    js-yaml "~4.1.0"
-    jsonpath-plus "~5.1.0"
-    lodash "~4.17.0"
-    tslib "^2.0.0"
-
 "@wix/motion-edm-autogen-types@1.0.11":
   version "1.0.11"
   resolved "https://registry.npmjs.org/@wix/motion-edm-autogen-types/-/motion-edm-autogen-types-1.0.11.tgz#0103a6dbda9001be44537a320dca0cc363ff2407"
   integrity sha512-NBsTA+w79B947dtz0r+5m8TX99gkhfK+Q3ZyBHBF3RLghf+RwcKKMowqw+FX2MpaVT6lvKyiutN81/hlL6U3ew==
-
-"@wix/motion-edm-autogen-types@1.0.17":
-  version "1.0.17"
-  resolved "https://registry.npmjs.org/@wix/motion-edm-autogen-types/-/motion-edm-autogen-types-1.0.17.tgz#fd5f7a8201498fd85425e6e04623dfab6bbf5b76"
-  integrity sha512-cvNPjreDph9h8/3l3uLn5tsXtXiDVv8jLwspBXlqKLPuxlRxSVrMeVOYNY2fQEfxw9l/rYLiE9jjI1DJwCE68w==
 
 "@wix/redirects@^1.0.28":
   version "1.0.28"
@@ -785,11 +679,6 @@
   version "1.5.1"
   resolved "https://registry.npmjs.org/@wix/sdk-types/-/sdk-types-1.5.1.tgz#7549493fde6783095117d61e9f09945ef3916903"
   integrity sha512-Q4nxSMa2xtutD7EYFtl09g7lJYxSoX93wJ0q6VKt4M/wbCibPxtyybFuJSFBAdVF8pSac/ufmtaBSmzzasuLzg==
-
-"@wix/sdk-types@^1.3.0":
-  version "1.5.5"
-  resolved "https://registry.npmjs.org/@wix/sdk-types/-/sdk-types-1.5.5.tgz#13d0abd26a3334117aa7f87ac9dc63fbde399158"
-  integrity sha512-iTTQ1MRd3s8tegmTm4KVg9RpK4JWY+lfeQRQtSXhbcOtywmHh/27eGSo2Yv3bWzvx0GWw5EstdJzFRRFKMSKJQ==
 
 "@wix/sdk@^1.5.7":
   version "1.5.7"

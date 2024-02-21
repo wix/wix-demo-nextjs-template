@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@wix/sdk": "^1.5.7",
-    "@wix/data": "^1.0.71",
     "@wix/wix-ui-icons-common": "^3.12.0",
     "body-scroll-lock": "^4.0.0-beta.0",
     "date-fns": "^2.30.0",

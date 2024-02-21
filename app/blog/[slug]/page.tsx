@@ -18,15 +18,13 @@ const wixClient = createClient({
 });
 
 export async function generateMetadata({ params }: any) {
-  const post = {
-    _id: "1",
-    data: {
-      ingredients: PLACEHOLDER_IMAGE,
-      dishName: "item 1",
-      preparationInstructions: "Item 1 content",
-      slug: "item-1",
-    },
-  };
+  const { items } = await wixClient.itemsSDK.queryDataItems({
+    dataCollectionId: "FarmToTableRecipes"
+  })
+    .eq('slug', params.slug)
+    .find();
+  const post = items[0];
+
   return {
     title: post ? post.data!.dishName : params.slug,
   };

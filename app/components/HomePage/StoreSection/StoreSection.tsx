@@ -6,11 +6,11 @@ import { PLACEHOLDER_IMAGE } from '@/app/constants';
 
 async function Collections() {
   const items = [{
-    name: 'item name 1', slug: 'item-1'
+    name: 'collection name 1', slug: 'collection-1', image: PLACEHOLDER_IMAGE
   }, {
-    name: 'item name 2', slug: 'item-2'
+    name: 'collection name 2', slug: 'collection-2', image: PLACEHOLDER_IMAGE
   }, {
-    name: 'item name 3', slug: 'item-3'
+    name: 'collection name 3', slug: 'collection-3', image: PLACEHOLDER_IMAGE
   }];
 
   return (
@@ -31,7 +31,7 @@ const CollectionCard: React.FC<{
       <div className="h-[348px] w-full">
         <Image
           alt="placeholder"
-          src={PLACEHOLDER_IMAGE}
+          src={item.image}
           objectFit="cover"
           width={600}
           height={800}

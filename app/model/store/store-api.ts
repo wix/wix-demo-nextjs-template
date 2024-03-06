@@ -33,25 +33,25 @@ export type Product = {
   productOptions: ProductOption[],
   variants: Variant[],
   additionalInfoSections: { title: string, description: string }[],
-  media: {mainMedia: { image: { url: string; altText: string } } },
+  media: { mainMedia: { image: { url: string; altText: string } }, items: { image: { url: string; altText: string } }[] },
   stock: { inStock: boolean, quantity: number },
   price: { price: number, currency: string, formatted: { price: string } }
 }
-export type Collection = { 
+export type Collection = {
   _id: string,
   name: string,
   slug: string,
-  media: {mainMedia: { image: { url: string; altText: string } } },
+  media: { mainMedia: { image: { url: string; altText: string } } },
 };
 
 const allCollections: Collection[] = [{
-  _id: ALL_ITEMS_ID, name: "All Products", slug: "all-products", media: {mainMedia: { image: { url: PLACEHOLDER_IMAGE, altText: "main image" } } },
+  _id: ALL_ITEMS_ID, name: "All Products", slug: "all-products", media: { mainMedia: { image: { url: PLACEHOLDER_IMAGE, altText: "main image" } } },
 },{
-  _id: "0", name: "Collection 1", slug: "collection-1", media: {mainMedia: { image: { url: PLACEHOLDER_IMAGE, altText: "main image" } } },
+  _id: "0", name: "Collection 1", slug: "collection-1", media: { mainMedia: { image: { url: PLACEHOLDER_IMAGE, altText: "main image" } } },
 }, {
-  _id: "1", name: "Collection 2", slug: "collection-2", media: {mainMedia: { image: { url: PLACEHOLDER_IMAGE, altText: "main image" } } },
+  _id: "1", name: "Collection 2", slug: "collection-2", media: { mainMedia: { image: { url: PLACEHOLDER_IMAGE, altText: "main image" } } },
 }, {
-  _id: "2", name: "Collection 2", slug: "collection-3", media: {mainMedia: { image: { url: PLACEHOLDER_IMAGE, altText: "main image" } } },
+  _id: "2", name: "Collection 2", slug: "collection-3", media: { mainMedia: { image: { url: PLACEHOLDER_IMAGE, altText: "main image" } } },
 }];
 
 const allProducts: Product[] = Array(8).fill(null).map((_, index) => ({
@@ -69,7 +69,7 @@ const allProducts: Product[] = Array(8).fill(null).map((_, index) => ({
   }],
   collectionIds: [ALL_ITEMS_ID, `${index % 3}`],
   description: `Description ${index + 1}`,
-  media: {mainMedia: { image: { url: PLACEHOLDER_IMAGE, altText: "main image" } } },
+  media: { mainMedia: { image: { url: PLACEHOLDER_IMAGE, altText: "main image" } }, items: [{ image: { url: PLACEHOLDER_IMAGE, altText: "main image" } }] },
   variants: [
     {
       _id: "00000000-0000-0000-0000-000000000000",

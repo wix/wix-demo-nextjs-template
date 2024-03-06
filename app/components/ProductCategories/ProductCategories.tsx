@@ -4,9 +4,10 @@ import Link from "next/link";
 import { Dropdown } from "flowbite-react";
 import { STORE_ROUTE } from "@/app/routes";
 import { ALL_ITEMS_ID } from '@/app/constants';
+import { Collection } from '@/app/model/store/store-api';
 
 export interface ProductCategoriesProps {
-  collections: {_id: string, name: string, slug: string}[];
+  collections: Collection[];
   selectedCollectionId?: string;
 }
 

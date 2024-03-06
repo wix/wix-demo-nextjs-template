@@ -3,13 +3,13 @@ import React, { FC } from "react";
 import Link from "next/link";
 import { Dropdown } from "flowbite-react";
 import { STORE_ROUTE } from "@/app/routes";
+import { ALL_ITEMS_ID } from '@/app/constants';
 
 export interface ProductCategoriesProps {
   collections: {_id: string, name: string, slug: string}[];
   selectedCollectionId?: string;
 }
 
-const ALL_ITEMS_ID = "00000000-000000-000000-000000000001";
 
 export const ProductCategories: FC<ProductCategoriesProps> = ({
   collections,

@@ -1,12 +1,13 @@
 import { Dropdown, Flowbite, useTheme } from "flowbite-react";
+import { ProductOption } from '@/app/model/store/store-api';
 
 export function Option({
-  onChange,
-  option,
-  selectedOption,
-}: {
+                         onChange,
+                         option,
+                         selectedOption,
+                       }: {
   onChange: Function;
-  option: {optionType: string,name: string, choices: {description: string, value: string}[]};
+  option: ProductOption;
   selectedOption: string;
 }) {
   const onSelect = (optionSelected: string) => {

@@ -40,8 +40,8 @@ const ProductCard = ({
             objectPosition: "center",
           }}
           sizes="(max-width: 768px) 100vw, (max-width: 1535px) 33vw, 25vw"
-          src={item.image.url || PLACEHOLDER_IMAGE}
-          alt={item.image.altText || "main image"}
+          src={item.media?.mainMedia?.image?.url || PLACEHOLDER_IMAGE}
+          alt={item.media?.mainMedia?.image?.altText || "main image"}
           className="w-full h-auto"
           priority={index < 4}
         />

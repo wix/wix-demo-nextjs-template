@@ -46,7 +46,7 @@ export default async function StoresCategoryPage({ params }: any) {
           <div className="flex flex-col sm:flex-row gap-2">
             <div className="box-border flex flex-col basis-1/2">
               <div>
-                <ImageGalleryClient items={[{src: PLACEHOLDER_IMAGE}, {src: PLACEHOLDER_IMAGE}, {src: PLACEHOLDER_IMAGE}]} />
+                <ImageGalleryClient items={product.media!.items!.map(({image}) => ({src: image!.url!}))} />
                 <div
                   className="pb-4 mx-auto break-words w-full max-w-xl mt-6 font-roboto font-normal"
                   dangerouslySetInnerHTML={{

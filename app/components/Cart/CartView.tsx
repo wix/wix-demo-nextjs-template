@@ -1,14 +1,32 @@
 "use client";
-import React, { useState } from "react";
+import React, {useCallback, useState} from "react";
 import { CartItem } from "../CartItem/CartItem";
 import { useUI } from "../Provider/context";
 import Link from "next/link";
 import { STORE_ROUTE } from "@/app/routes";
+import { usePrice } from '@/app/hooks/usePrice';
+import { createCheckoutFromCurrentCart } from '@/app/model/ecom/ecom-api';
+import { createRedirectSession } from '@/app/model/redirect/redirect-api';
+import { useCart } from '@/app/hooks/useCart';
 
 export const CartView = ({ layout = "mini" }: { layout?: "full" | "mini" }) => {
   const { closeSidebar, openModalNotPremium } = useUI();
+  const { data, isLoading } = useCart();
   const [redirecting, setRedirecting] = useState<boolean>(false);
-  const subTotal = "16$";
+  const subTotal = usePrice(
+    data && {
+      amount: data!.lineItems!.reduce(
+        (
+          acc,
+          item
+        ) => {
+          return acc + Number.parseFloat(item.price?.amount!) * item.quantity!;
+        },
+        0
+      ),
+      currencyCode: data.currency!,
+    }
+  );
   const lineItems = [{
     _id: "1", quantity: 1, url: "", productName: "item 1", description: "item 1 description"
   }, {
@@ -18,10 +36,30 @@ export const CartView = ({ layout = "mini" }: { layout?: "full" | "mini" }) => {
   }]
 
   const handleClose = () => closeSidebar();
-  const goToCheckout = () => {
+  const goToCheckout = useCallback(async () => {
     closeSidebar();
     setRedirecting(true);
-  };
+    try {
+      const checkout = await createCheckoutFromCurrentCart();
+      const { redirectSession } =
+        await createRedirectSession({
+          checkoutId: checkout!.checkoutId!,
+          callbacks: {
+            postFlowUrl: window.location.origin,
+            thankYouPageUrl: `${window.location.origin}/stores-success`,
+            cartPageUrl: `${window.location.origin}/cart`,
+          }, });
+      window.location.href = redirectSession!.fullUrl!;
+    } catch (e: any) {
+      if (
+        e.details.applicationError.code ===
+        "SITE_MUST_ACCEPT_PAYMENTS_TO_CREATE_CHECKOUT"
+      ) {
+        openModalNotPremium();
+      }
+      setRedirecting(false);
+    }
+  }, [data]);
 
   const isMini = layout === "mini";
   return (

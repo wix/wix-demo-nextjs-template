@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRequestUrl } from "../../utils/server-utils";
-import {createRedirectSession} from '@/app/model/redirect/redirect-api';
+import { createRedirectSession } from '@/app/model/redirect/redirect-api';
 
 export async function GET(request: NextRequest) {
   const requestUrl = getRequestUrl(request);

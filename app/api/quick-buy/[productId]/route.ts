@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRequestUrl } from "@/app/utils/server-utils";
 import { getProduct } from '@/app/model/store/store-api';
-import {createCheckout, LineItem} from '@/app/model/ecom/ecom-api';
-import {createRedirectSession} from '@/app/model/redirect/redirect-api';
+import { createCheckout, LineItem } from '@/app/model/ecom/ecom-api';
+import { createRedirectSession } from '@/app/model/redirect/redirect-api';
 
 export async function GET(
   request: NextRequest,

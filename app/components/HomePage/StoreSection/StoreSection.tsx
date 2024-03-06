@@ -27,8 +27,8 @@ const CollectionCard: React.FC<{
     <div className="flex flex-col gap-[24px]">
       <div className="h-[348px] w-full">
         <Image
-          alt={item.image.altText}
-          src={item.image.url}
+          alt={item.media?.mainMedia?.image?.altText!}
+          src={item.media?.mainMedia?.image?.url!}
           objectFit="cover"
           width={600}
           height={800}

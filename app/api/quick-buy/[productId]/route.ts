@@ -3,6 +3,7 @@ import { getRequestUrl } from "@/app/utils/server-utils";
 import { getProduct } from '@/app/model/store/store-api';
 import { createCheckout, LineItem } from '@/app/model/ecom/ecom-api';
 import { createRedirectSession } from '@/app/model/redirect/redirect-api';
+import { STORES_APP_ID } from '@/app/constants';
 
 export async function GET(
   request: NextRequest,
@@ -42,6 +43,7 @@ export async function GET(
     quantity,
     catalogReference: {
       catalogItemId: product._id!,
+      appId: STORES_APP_ID,
       options: selectedOptions,
     },
   };

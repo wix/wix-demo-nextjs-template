@@ -11,6 +11,7 @@ import { ProductTag } from "../ProductTag/ProductTag";
 import { usePrice } from "@/app/hooks/usePrice";
 import Link from "next/link";
 import { Product, Variant } from '@/app/model/store/store-api';
+import { STORES_APP_ID } from '@/app/constants';
 
 interface ProductSidebarProps {
   product: Product;
@@ -79,6 +80,7 @@ export const ProductSidebar: FC<ProductSidebarProps> = ({ product }) => {
         quantity,
         catalogReference: {
           catalogItemId: product._id!,
+          appId: STORES_APP_ID,
           ...createProductOptions(selectedOptions, selectedVariant),
         },
       });

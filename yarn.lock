@@ -370,6 +370,16 @@
   resolved "https://registry.npmjs.org/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
+"@wix/ecom@^1.0.467":
+  version "1.0.498"
+  resolved "https://registry.npmjs.org/@wix/ecom/-/ecom-1.0.498.tgz#c8e183e323f945a5bd690347e5bef9cb1d5b799f"
+  integrity sha512-wkq8SRGBrIPzA7jw69d9BDFGuVAaKJhZWxxI6DemhVEO0LXOYGA02dnUmKwiIgaIfWe1cPdI/01xpBXlytAbYw==
+  dependencies:
+    "@wix/metro-runtime" "^1.1528.0"
+    "@wix/motion-edm-autogen-query-wrapper" "^1.0.37"
+    "@wix/sdk-runtime" "^0.2.7"
+    "@wix/sdk-types" "^1.5.3"
+
 "@wix/filter-builder@^1.0.39":
   version "1.0.39"
   resolved "https://registry.npmjs.org/@wix/filter-builder/-/filter-builder-1.0.39.tgz#27450aa864db4afe04b2e5964012073af9610338"

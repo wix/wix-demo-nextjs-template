@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^4.18.0",
+    "@wix/ecom": "^1.0.467",
     "@wix/sdk": "^1.5.7",
     "@wix/stores": "^1.0.120",
     "@wix/wix-ui-icons-common": "^3.12.0",

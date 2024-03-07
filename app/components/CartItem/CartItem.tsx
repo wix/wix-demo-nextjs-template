@@ -2,6 +2,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from 'next/image';
+import { media } from '@wix/sdk';
 import { useUI } from "../Provider/context";
 import { Quantity } from "../Quantity/Quantity";
 import { PLACEHOLDER_IMAGE } from '@/app/constants';
@@ -73,7 +74,7 @@ export const CartItem = ({
                 <Image
                   alt="line item"
                   width={150} height={150}
-                  src={PLACEHOLDER_IMAGE}
+                  src={media.getScaledToFillImageUrl(item.image!, 150, 150, {}) || PLACEHOLDER_IMAGE}
                 />
               </div>
             </Link>
@@ -81,7 +82,7 @@ export const CartItem = ({
             <Image
               alt="line item"
               width={150} height={150}
-              src={PLACEHOLDER_IMAGE}
+              src={media.getScaledToFillImageUrl(item.image!, 150, 150, {}) || PLACEHOLDER_IMAGE}
             />
           )}
         </div>

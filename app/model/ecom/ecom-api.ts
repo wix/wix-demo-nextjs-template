@@ -1,65 +1,67 @@
-export type LineItem = {
-  _id?: string,
-  quantity: number,
-  catalogReference: {
-    catalogItemId: string,
-    options?: Record<string, any>
-  }
-  url?: string,
-  productName?: {original: string},
-  price?: { amount: string }
-};
+import {createClient, OAuthStrategy} from '@wix/sdk';
+import {
+  cart,
+  checkout,
+  currentCart,
+  orders,
+} from '@wix/ecom';
+import Cookies from 'js-cookie';
+import { WIX_REFRESH_TOKEN } from '@/app/constants';
 
-export type Cart = { overrideCheckoutUrl?: string, lineItems?: LineItem[], currency?: string };
+const wixClient = createClient({
+  modules: {
+    cart,
+    checkout,
+    currentCart,
+    orders,
+  },
+  auth: OAuthStrategy({
+    clientId: process.env.NEXT_PUBLIC_WIX_CLIENT_ID!,
+    tokens: {
+      refreshToken: JSON.parse(Cookies.get(WIX_REFRESH_TOKEN) || "{}"),
+      accessToken: { value: "", expiresAt: 0 }
+    },
+  }),
+});
 
-export type LineItemQuantityUpdate = { _id: string, quantity: number };
+export type LineItem = cart.LineItem;
 
-let cart: Cart = { currency: 'USD', lineItems: [] }
+export type Cart = cart.Cart;
+
+export type LineItemQuantityUpdate = cart.LineItemQuantityUpdate;
 
 export const addToCurrentCart = async ({ lineItems }: {lineItems: LineItem[]}) => {
-  lineItems.forEach((lineItem) => {
-    lineItem.price = lineItem.price || { amount: '5' }
-  })
-  cart.lineItems?.push(...lineItems);
-  return { cart }
+  return wixClient.currentCart.addToCurrentCart({ lineItems });
 }
 
 export const updateCurrentCart = async ({ cartInfo }: { cartInfo: Cart }) => {
-  cart = {
-    ...cart,
-    ...cartInfo
-  }
+  return wixClient.currentCart.updateCurrentCart({ cartInfo });
 }
 
 export const getCurrentCart = async () => {
-  return cart
+  return wixClient.currentCart.getCurrentCart();
 }
 
 export const createCheckoutFromCurrentCart = async () => {
-  return { checkoutId: 'checkout-id' }
+  return wixClient.currentCart.createCheckoutFromCurrentCart(currentCart.ChannelType.WEB);
 }
 
-export const createCheckout = async ({}: { lineItems: LineItem[], overrideCheckoutUrl: string }) => {
-  return { _id: 'checkout-id' }
+export const createCheckout = async ({ lineItems, overrideCheckoutUrl }: { lineItems: LineItem[], overrideCheckoutUrl: string }) => {
+  return wixClient.checkout.createCheckout({
+    lineItems,
+    overrideCheckoutUrl,
+    channelType: checkout.ChannelType.WEB
+  });
 }
 
 export const getOrder = async (orderId: string) => {
-  const lineItems: LineItem[] = [];
-
-  return { _id: orderId, currency: 'USD', lineItems }
+  return wixClient.orders.getOrder(orderId);
 }
 
 export const updateCurrentCartLineItemQuantity = async (items: LineItemQuantityUpdate[]) => {
-  items.forEach(({ _id, quantity }) => {
-    const lineItem = cart.lineItems?.find((lineItem) => lineItem._id === _id)
-    if (lineItem) {
-      lineItem.quantity = quantity
-    }
-  })
-  return { cart };
+  return wixClient.currentCart.updateCurrentCartLineItemQuantity(items);
 }
 
 export const removeLineItemsFromCurrentCart = async (itemIds: string[]) => {
-  cart.lineItems = cart.lineItems?.filter(({_id}) => itemIds.indexOf(_id!) === -1)
-  return { cart };
+  return wixClient.currentCart.removeLineItemsFromCurrentCart(itemIds);
 }

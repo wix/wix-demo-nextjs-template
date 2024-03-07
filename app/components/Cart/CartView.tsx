@@ -27,13 +27,7 @@ export const CartView = ({ layout = "mini" }: { layout?: "full" | "mini" }) => {
       currencyCode: data.currency!,
     }
   );
-  const lineItems = [{
-    _id: "1", quantity: 1, url: "", productName: "item 1", description: "item 1 description"
-  }, {
-    _id: "2", quantity: 2, url: "", productName: "item 2", description: "item 2 description"
-  }, {
-    _id: "3", quantity: 3, url: "", productName: "item 3", description: "item 3 description"
-  }]
+  const lineItems = data?.lineItems;
 
   const handleClose = () => closeSidebar();
   const goToCheckout = useCallback(async () => {
@@ -100,10 +94,11 @@ export const CartView = ({ layout = "mini" }: { layout?: "full" | "mini" }) => {
               </span>
             </div>
             <ul className="sm:px-6 p-4 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-accent-2 border-accent-2">
-              {lineItems?.map((item: any) => (
+              {lineItems?.map((item) => (
                 <CartItem
                   key={item._id}
                   item={item}
+                  currencyCode={data?.currency!}
                 />
               ))}
             </ul>

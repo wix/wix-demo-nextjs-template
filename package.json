@@ -12,6 +12,7 @@
     "lint": "next lint --fix"
   },
   "dependencies": {
+    "@tanstack/react-query": "^4.18.0",
     "@wix/sdk": "^1.5.7",
     "@wix/wix-ui-icons-common": "^3.12.0",
     "body-scroll-lock": "^4.0.0-beta.0",

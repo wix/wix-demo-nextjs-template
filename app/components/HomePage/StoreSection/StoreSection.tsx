@@ -2,16 +2,13 @@ import React from "react";
 import Link from "next/link";
 import Image from 'next/image';
 import { STORE_CATEGORY_ROUTE, STORE_ROUTE } from "@/app/routes";
-import { PLACEHOLDER_IMAGE } from '@/app/constants';
+import { Collection, queryCollections } from '@/app/model/store/store-api';
 
 async function Collections() {
-  const items = [{
-    name: 'item name 1', slug: 'item-1'
-  }, {
-    name: 'item name 2', slug: 'item-2'
-  }, {
-    name: 'item name 3', slug: 'item-3'
-  }];
+  const items = await queryCollections({
+    limit: 3,
+    exclude: "All Products",
+  });
 
   return (
     <div className="grid gap-x-[64px] gap-y-8 lg:grid-cols-3 ">
@@ -23,15 +20,15 @@ async function Collections() {
 }
 
 const CollectionCard: React.FC<{
-  item: any;
-  index?: number;
-}> = ({ item, index = -1 }) => {
+  item: Collection;
+  index: number;
+}> = ({ item, index }) => {
   return (
     <div className="flex flex-col gap-[24px]">
       <div className="h-[348px] w-full">
         <Image
-          alt="placeholder"
-          src={PLACEHOLDER_IMAGE}
+          alt={item.media?.mainMedia?.image?.altText!}
+          src={item.media?.mainMedia?.image?.url!}
           objectFit="cover"
           width={600}
           height={800}

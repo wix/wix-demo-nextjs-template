@@ -1,8 +1,10 @@
-export type SelectedOptions = Record<string, string | null>;
 import { Dispatch, SetStateAction } from "react";
+import { Product } from '@/app/model/store/store-api';
+
+export type SelectedOptions = Record<string, string | null>;
 
 export function selectDefaultOptionFromProduct(
-  product: {productOptions: {name: string, choices: {description: string}[]}[]},
+  product: Product,
   updater: Dispatch<SetStateAction<SelectedOptions>>
 ) {
   // Selects the default option

@@ -1,11 +1,26 @@
 import { ProductSidebar } from "@/app/components/Product/ProductSidebar/ProductSidebar";
 import ImageGalleryClient from '@/app/components/Image/ImageGallery/ImageGallery.client';
 import { PLACEHOLDER_IMAGE } from '@/app/constants';
+import { queryProducts } from '@/app/model/store/store-api';
 
 export async function generateMetadata({ params }: any) {
-  const product = { name: "Product name" };
+  if (params.slug) {
+    const product = (
+      await queryProducts({
+        slug: params.slug,
+        limit: 1,
+      })
+    )[0];
+
+    if (product && product.name) {
+      return {
+        title: product.name,
+      };
+    }
+  }
+
   return {
-    title: product.name ?? "Unavailable Product",
+    title: "Unavailable Product",
   };
 }
 
@@ -14,17 +29,16 @@ export default async function StoresCategoryPage({ params }: any) {
     return;
   }
 
-  const product = {
-    _id: "1",
-    name: "Product name", sku: "sku",
-    description: "Product Description",
-    additionalInfoSections: [{
-    title: "Additional Info 1", description: "Additional Description 1"
-  }, {
-    title: "Additional Info 2", description: "Additional Description 2"
-  }],
-    productOptions: [{optionType: "color", name: "Color", choices: [{description: "blue", value: "blue"}, {description: "green", value: "green"}]}]
-  };
+  const product = (
+    await queryProducts({
+      slug: params.slug,
+      limit: 1,
+    })
+  )[0];
+
+  if (!product) {
+    return;
+  }
   return (
     <div className="mx-auto px-14 my-[80px]">
       {product ? (
@@ -32,7 +46,7 @@ export default async function StoresCategoryPage({ params }: any) {
           <div className="flex flex-col sm:flex-row gap-2">
             <div className="box-border flex flex-col basis-1/2">
               <div>
-                <ImageGalleryClient items={[{src: PLACEHOLDER_IMAGE}, {src: PLACEHOLDER_IMAGE}, {src: PLACEHOLDER_IMAGE}]} />
+                <ImageGalleryClient items={product.media!.items!.map(({image}) => ({src: image!.url!}))} />
                 <div
                   className="pb-4 mx-auto break-words w-full max-w-xl mt-6 font-roboto font-normal"
                   dangerouslySetInnerHTML={{
@@ -56,5 +70,16 @@ export default async function StoresCategoryPage({ params }: any) {
 }
 
 export async function generateStaticParams(): Promise<{ slug?: string }[]> {
-  return [{slug: 'product-1'}, {slug: 'product-2'}, {slug: 'product-3'}];
+  return queryProducts({
+    limit: 10,
+  })
+    .then((items) =>
+      items.map((product: any) => ({
+        slug: product.slug,
+      }))
+    )
+    .catch((err) => {
+      console.error(err);
+      return [];
+    });
 }

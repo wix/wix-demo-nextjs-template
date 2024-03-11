@@ -1,18 +1,19 @@
 "use client";
 import Swatch from "../Swatch/Swatch";
 import { Option } from "../Option/Option";
+import { ProductOption } from '@/app/model/store/store-api';
 
 interface ProductOptionsProps {
-  options: {optionType: string,name: string, choices: {description: string, value: string}[]}[];
+  options: ProductOption[];
   selectedOptions: any;
   setSelectedOptions: React.Dispatch<React.SetStateAction<any>>;
 }
 
 export const ProductOptions: React.FC<ProductOptionsProps> = ({
-  options,
-  selectedOptions,
-  setSelectedOptions,
-}) => {
+                                                                options,
+                                                                selectedOptions,
+                                                                setSelectedOptions,
+                                                              }) => {
   const setSelected = (newOption: Record<string, string>) => {
     setSelectedOptions((selectedOptions: any) => {
       return {

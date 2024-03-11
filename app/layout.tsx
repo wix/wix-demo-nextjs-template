@@ -6,6 +6,7 @@ import { LoginModal } from "./components/LoginModal/LoginModal";
 import { Metadata } from "next";
 import { LayoutProvider } from "@/app/components/LayoutProvider/LayoutProvider";
 import NextTopLoader from "nextjs-toploader";
+import {ClientProvider} from '@/app/components/Provider/Providers';
 
 export const metadata: Metadata = {
   title: {
@@ -28,7 +29,7 @@ export default function RootLayout({
     <body className="bg-site">
     <link rel="icon" href="https://www.wix.com/favicon.ico" />
     {process.env.NEXT_PUBLIC_WIX_CLIENT_ID ? (
-      <>
+      <ClientProvider>
         <NextTopLoader shadow={false} showSpinner={false} />
         <Header />
         <main className="bg-site min-h-[600px]">
@@ -39,7 +40,7 @@ export default function RootLayout({
         <div className="mt-3 sm:mt-9">
           <Footer />
         </div>
-      </>
+      </ClientProvider>
     ) : (
       <div className="bg-site min-h-[600px] max-w-5xl mx-auto p-5">
         Page not available. Please add an environment variable called

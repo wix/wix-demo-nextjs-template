@@ -9,6 +9,7 @@ import { HiArrowDown } from "react-icons/hi";
 import { Quantity } from "../../Quantity/Quantity";
 import { ProductTag } from "../ProductTag/ProductTag";
 import { usePrice } from "@/app/hooks/usePrice";
+import { BackInStockFormModal } from "../../BackInStockFormModal/BackInStockFormModal";
 import Link from "next/link";
 import { Product, Variant } from '@/app/model/store/store-api';
 import { STORES_APP_ID } from '@/app/constants';
@@ -32,7 +33,7 @@ const createProductOptions = (
 
 export const ProductSidebar: FC<ProductSidebarProps> = ({ product }) => {
   const addItem = useAddItemToCart();
-  const { openSidebar } = useUI();
+  const { openSidebar, openModalBackInStock } = useUI();
   const [loading, setLoading] = useState(false);
   const [quantity, setQuantity] = useState<number>(1);
   const [selectedVariant, setSelectedVariant] = useState<Variant>({});
@@ -89,6 +90,10 @@ export const ProductSidebar: FC<ProductSidebarProps> = ({ product }) => {
     } catch (err) {
       setLoading(false);
     }
+  };
+
+  const notifyWhenAvailable = async () => {
+    openModalBackInStock(product);
   };
 
   const buyNowLink = useMemo(() => {
@@ -162,13 +167,18 @@ export const ProductSidebar: FC<ProductSidebarProps> = ({ product }) => {
       ) : null}
       {!isAvailableForPurchase ? (
         <div>
+          <BackInStockFormModal
+            product={product}
+            variantId={selectedVariant._id}
+          />
           <button
-            aria-label="Not Available"
-            className="btn-main w-full my-1 rounded-2xl text-2xl"
+            aria-label="Notify When Available"
+            className="btn-main w-full my-1 font-roboto font-normal"
             type="button"
-            disabled
+            onClick={notifyWhenAvailable}
+            disabled={loading}
           >
-            No Available
+            Notify When Available
           </button>
         </div>
       ) : null}

@@ -1,15 +1,18 @@
 import {createClient, OAuthStrategy} from '@wix/sdk';
 import {
+  backInStockNotifications,
   cart,
   checkout,
   currentCart,
   orders,
 } from '@wix/ecom';
 import Cookies from 'js-cookie';
-import { WIX_REFRESH_TOKEN } from '@/app/constants';
+import { STORES_APP_ID, WIX_REFRESH_TOKEN } from '@/app/constants';
+import { Product } from '../store/store-api';
 
 const wixClient = createClient({
   modules: {
+    backInStockNotifications,
     cart,
     checkout,
     currentCart,
@@ -64,4 +67,27 @@ export const updateCurrentCartLineItemQuantity = async (items: LineItemQuantityU
 
 export const removeLineItemsFromCurrentCart = async (itemIds: string[]) => {
   return wixClient.currentCart.removeLineItemsFromCurrentCart(itemIds);
+}
+
+export const createBackInStockNotificationRequest = async ({
+                                                             email,
+                                                             variantId,
+                                                             product
+}: { email: string, variantId: string, product: Product }) => {
+  return wixClient.backInStockNotifications.createBackInStockNotificationRequest(
+    {
+      email,
+      itemUrl: window.location.href,
+      catalogReference: {
+        appId: STORES_APP_ID,
+        catalogItemId: product._id,
+        options: { variantId },
+      },
+    },
+    {
+      price: product.price?.price?.toFixed(),
+      name: product.name!,
+      image: product.media?.mainMedia?.image?.url,
+    }
+  )
 }

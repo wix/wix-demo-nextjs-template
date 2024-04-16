@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRequestUrl } from "@/app/utils/server-utils";
 import { getProduct } from '@/app/model/store/store-api';
-import { createCheckout, LineItem } from '@/app/model/ecom/ecom-api';
-import { createRedirectSession } from '@/app/model/redirect/redirect-api';
+import { addToCurrentCart, LineItem } from '@/app/model/ecom/ecom-api';
 import { STORES_APP_ID } from '@/app/constants';
 
 export async function GET(
@@ -14,7 +13,6 @@ export async function GET(
   }
 ) {
   const requestUrl = getRequestUrl(request);
-  const baseUrl = new URL("/", requestUrl).toString();
   const { searchParams } = new URL(requestUrl);
   const quantity = parseInt(searchParams.get("quantity") || "1", 10);
   const productOptions = JSON.parse(
@@ -47,19 +45,9 @@ export async function GET(
       options: selectedOptions,
     },
   };
-  const checkout = await createCheckout({
+  const { cart } = await addToCurrentCart({
     lineItems: [item],
-    overrideCheckoutUrl: `${baseUrl}api/redirect-to-checkout?checkoutId={checkoutId}`,
   });
 
-  const { redirectSession } = await createRedirectSession({
-    checkoutId: checkout!._id!,
-    callbacks: {
-      postFlowUrl: baseUrl,
-      thankYouPageUrl: `${baseUrl}stores-success`,
-      cartPageUrl: `${baseUrl}cart`,
-    },
-  });
-
-  return NextResponse.redirect(redirectSession!.fullUrl!);
+  return NextResponse.json({ cart });
 }

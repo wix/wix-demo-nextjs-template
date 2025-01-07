@@ -26,7 +26,7 @@ async function Blog({ slug }: { slug: string }) {
           <h1 className="text-[50px] text-[#2F2E2E] font-serif sm:text-5xl my-2 text-center px-5 pb-4">
             {post.data!.dishName}
           </h1>
-          <RichContentViewer content={toDraft(post.data!.richcontent)} />
+          <RichContentViewer content={post.data!.richcontent} />
         </div>
       ) : (
         <div className="text-3xl w-full text-center p-9 box-border">
